@@ -1,0 +1,19 @@
+% Simple Single-Diode Model
+\begin{circuitikz}
+    \footnotesize
+    \draw
+    % Source to top terminal
+    (0,0) to[current source,i=$I_{\mathrm{Ph}}$] (0,2) -- (2,2) to[R,l^=$R_{\mathrm{S}}$] (4,2) node[ocirc] {}
+
+    % Open terminal at bottom
+    (4,0) node[ocirc] {} -- (0,0)
+
+    % Voltage arrow over open terminals
+    (4,1.7) -- (4,0.3) node[currarrow,rotate=-90] {}
+    (4,1) node[anchor=west] {$V_{\mathrm{offen}}$}
+
+    % Parallel elements
+    (1,0) to[empty diode,*-*,l_=$D$] (1,2)
+    (2,0) to[R,*-*,l_=$R_{\mathrm{Sh}}$] (2,2)
+    ;
+\end{circuitikz}

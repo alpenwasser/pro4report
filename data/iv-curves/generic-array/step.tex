@@ -1,0 +1,113 @@
+\documentclass[a4paper]{article}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+%\usepgfplotslibrary{external}%\tikzexternalize
+\pgfplotsset{compat=1.12}
+\usepgfplotslibrary{colormaps}
+\begin{document}
+\pgfplotsset{
+    /pgfplots/colormap={temp2}{rgb255=(36,0,217) rgb255=(25,29,247) rgb255=(41,87,255)
+        rgb255=(61,135,255) rgb255=(87,176,255) rgb255=(117,211,255) rgb255=(153,235,255)
+        rgb255=(189,249,255) rgb255=(235,255,255) rgb255=(255,255,235) rgb255=(255,242,189)
+        rgb255=(255,214,153) rgb255=(255,172,117) rgb255=(255,120,87) rgb255=(255,61,61)
+        rgb255=(247,40,54) rgb255=(217,22,48) rgb255=(166,0,33)}
+}
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0mm)},y={(100mm,140mm)}]
+        \begin{axis}[
+            colormap/hot2,
+            %colormap/cool,
+            %colormap/viridis,
+            %colormap/temp,
+            height=100mm,
+            width=140mm,
+            width=\textwidth,
+            grid=both,
+            zmin=0,
+            thick,
+            xlabel=Spannung,
+            ylabel=Strom,
+            zlabel=Leistung,
+            legend style={at={(0,-0.15)},anchor=north west},
+            legend cell align=left,
+        ]
+            % 10A
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{I(R3)},
+            ] table[y expr=9] {iv-generic--9a.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{power},
+            ] table[x expr=281] {iv-generic--9a.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{power},
+            ] table[x expr=0] {iv-generic--9a.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{I(R3)},
+            ] table[z expr=0] {iv-generic--9a.dat};
+            \addplot3[
+                surf,
+                shader=interp,
+            ] table {iv-generic--full-dataset.dat};
+            \addplot3[
+                draw=blue,
+                very thick,
+            ] table {iv-generic--full-dataset.dat};
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0mm)},y={(90mm,0.9\textwidth)}]
+       \begin{axis}[%
+               height=50mm,
+               width=\textwidth,
+               at={(0,50mm)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Strom (\si{\ampere}),
+               colormap/hot2,
+               %axis y line*=left,
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+           \addplot[-,purple]  table[x=V(out), y=I(R3)] {iv-generic--1a.dat};
+           \addplot[-,teal]    table[x=V(out), y=I(R3)] {iv-generic--4a.dat};
+           \addplot[-,magenta] table[x=V(out), y=I(R3)] {iv-generic--7a.dat};
+           \addplot[-,blue]    table[x=V(out), y=I(R3)] {iv-generic--9a.dat};
+            %\addplot[-,color=blue] table {data/iv-curves/module-72cells-series--reference--all-ok.dat};
+            %\addplot[-,color=teal] table {data/iv-curves/module-72cells-series--reference--ifail-5A.dat};
+            %\addplot[-,color=magenta] table {data/iv-curves/module-72cells-series--reference--ifail-1A.dat};
+        \end{axis}
+        \begin{axis}[%
+               height=50mm,
+               width=\textwidth,
+               at={(0,0)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Leistung (\si{\watt}),
+               %axis y line*=left,
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+           \addplot[-,purple]  table[x=V(out), y=power] {iv-generic--1a.dat};
+           \addplot[-,teal]    table[x=V(out), y=power] {iv-generic--4a.dat};
+           \addplot[-,magenta] table[x=V(out), y=power] {iv-generic--7a.dat};
+           \addplot[-,blue]    table[x=V(out), y=power] {iv-generic--9a.dat};
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}
+\end{document}

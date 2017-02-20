@@ -1,7 +1,13 @@
 \begin{circuitikz}
     \draw
-    (-1,0) to[empty photodiode,o-,l_=PV-Modul] (1,0) to[short] (6,0)
-    %(2,-2) to[short,o-] (2,-0.05) to[L=L] (4,-0.05) to[short,-o] (4,-2)
-    (2,-2) -- (2,-0.05) to[L,l^=Kopplung] (4,-0.05) -- (4,-2) to[sinusoidal voltage source,l^=$U_{\mathrm{Signal}}$] (2,-2)
+    (-1,0) to[empty photodiode,o-,l_=PV-Modul] (1,0) -- (2,0) to[L,l_=L2] (4,0) -- (7,0) to[L,l_=L2] (9,0) to[short] (10,0)
+    (2.5,0.30) -- (3.5,0.30)
+    (2.25,0.35) node {K}
+    (2.5,0.40) -- (3.5,0.40)
+    (7.5,0.30) -- (8.5,0.30)
+    (7.25,0.35) node {K}
+    (7.5,0.40) -- (8.5,0.40)
+    (4,2) -- (4,0.7) to[L,l_=L1] (2,0.7) -- (2,2) to[sinusoidal voltage source,l^=$U_{\mathrm{Sender}}$] (4,2)
+    (9,2) -- (9,0.7) to[L,l_=L1] (7,0.7) -- (7,2) to[sinusoidal voltage source,l^=$U_{\mathrm{Empf\text{\"a}nger}}$] (9,2)
     ;
 \end{circuitikz}

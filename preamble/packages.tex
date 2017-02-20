@@ -34,18 +34,38 @@
 \usepackage{graphicx}
 \usepackage{amsmath}         % for reasonable math typesetting
 \usepackage{pdfpages}        % include pdf documents
-%\usepackage{amsfonts}        % not sure yet if we need this
 \usepackage{adjustbox}       % helps w/ minipage alignmant
 \usepackage{pbox}            % boxes w/ line breaks in tables
 \usepackage[textsize=footnotesize, textwidth = 37mm, german, colorinlistoftodos]{todonotes}
 \usepackage{calc}            % used for calculating margins and widths for A3 pages
-%\usepackage{caption}         % captions outside float environments, overrides memoir's caption facilities
 \usepackage[separate-uncertainty=true]{siunitx}
 \usepackage[light]{kpfonts}
 \usepackage{counttexruns}
 \usepackage[european,siunitx,cuteinductors]{circuitikz}
+\usepackage{adjustbox}
+\usepackage{microtype}
+\usepackage{colortbl}
+%\usepackage{amsfonts}        % not sure yet if we need this
+%\usepackage{caption}         % captions outside float environments, overrides memoir's caption facilities
+%\usepackage{subcaption} % same as the caption package, seems to override memoir's own caption configs
 %\usepackage{datetime2}
+\usepackage{wrapfig}
+\usepackage{listings}
+%\usepackage{titletoc}        % TOC per chapter
 
+%\overfullrule=2cm
+
+% -------------------------------------------------------- %
+% xcolor  and kvoptions  are  loaded by  xcolor-solarized. %
+% If   you  require   special   options   for  these   two %
+% packages,  uncomment  these  two lines  and  pass  those %
+% options. Otherwise  leave them  commented out  since the %
+% packages are loaded anyway.                              %
+% -------------------------------------------------------- %
+%\usepackage{xcolor}
+%\usepackage{kvoptions}
+%\usepackage[prefix=sol]{xcolor-solarized}
+\usepackage{xcolor-solarized}
 
 % -------------------------------------------------------- %
 % Draft Watermark                                          %
@@ -53,9 +73,9 @@
 % Prints  a watermark  across the  page, marking  it as  a %
 % draft.                                                   %
 % -------------------------------------------------------- %
-\usepackage{draftwatermark}
-\SetWatermarkText{Entwurf, \today}
-\SetWatermarkScale{0.5}
+%\usepackage{draftwatermark}
+%\SetWatermarkText{Entwurf, \today}
+%\SetWatermarkScale{0.5}
 %\usepackage[final]{draftwatermark} % removes watermark
 
 
@@ -69,11 +89,20 @@
 % -------------------------------------------------------- %
 \usepackage{tikz}
 \usetikzlibrary{arrows}
+\usetikzlibrary{graphs}
+\usetikzlibrary{spy}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.symbols}
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{pgfplots}
+\usepackage{pgfplotstable}
 %\usepgfplotslibrary{units}
 \usetikzlibrary{pgfplots.units}
-\pgfplotsset{compat=newest}
+\pgfplotsset{compat=1.10}
 \pgfplotsset{max space between ticks=80pt}
 \pgfplotsset{max space between ticks=80pt}
 \pgfplotsset{try min ticks=5}
@@ -84,7 +113,9 @@
 }
 \pgfplotsset{every axis plot/.append style={%
     line width=0.5pt}}
-    %thick}}
+\usepgfplotslibrary{colormaps}
+
+\usepackage{bytefield}
 
 
 % -------------------------------------------------------- %
@@ -130,20 +161,25 @@
         bookmarksnumbered=true,
         colorlinks=true,
         linkcolor=blue,
-        citecolor=blue,
-        urlcolor=magenta,
+        citecolor=solarized-cyan,
+        urlcolor=purple,
         %hidelinks=false,
     ]{hyperref}
 }
 
-
 % -------------------------------------------------------- %
-% xcolor  and kvoptions  are  loaded by  xcolor-solarized. %
-% If   you  require   special   options   for  these   two %
-% packages,  uncomment  these  two lines  and  pass  those %
-% options. Otherwise  leave them  commented out  since the %
-% packages are loaded anyway.                              %
+% Input Listing Formatting                                 %
 % -------------------------------------------------------- %
-%\usepackage{xcolor}
-%\usepackage{kvoptions}
-\usepackage[prefix=sol]{xcolor-solarized}
+\lstdefinestyle{txt}{
+    aboveskip           = 3mm,
+    belowskip           = 3mm,
+    showstringspaces    = false,
+    columns             = flexible,
+    keepspaces          = true,
+    basicstyle          = {\scriptsize\ttfamily},
+    numbers             = left,
+    numberstyle         = \tiny\color{gray},
+    breaklines          = true,
+    breakatwhitespace   = true,
+    tabsize             = 3
+}

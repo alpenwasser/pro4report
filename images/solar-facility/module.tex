@@ -1,0 +1,28 @@
+\begin{tikzpicture}[remember picture, overlay]
+    \begin{scope}[x={(0mm,80mm)},y={(0mm,-170mm)},line width=1pt,cap=round]
+
+        \node[anchor=north west,inner sep=0pt] at (0,0) {%
+            %\includegraphics[width=80mm,height=160mm]{images/solar-facility/module-terminals.jpeg}
+            \includegraphics[width=80mm,height=160mm]{module-terminals.png}
+        };
+
+        % Horizontal measurement between wires
+        \node at (13.25mm,5mm) {\SI{125}{\milli\meter}};
+        \draw (6.5mm,0mm) -- (6.5mm,4mm);
+        \draw (20mm,0mm) -- (20mm,4mm);
+        \draw[latex-latex] (6.5mm,2mm) -- (20mm,2mm);
+
+        % Vertical measurement
+        \node[rotate=90] at (-5mm,-76.5mm) {\SI{1500}{\milli\meter}};
+        \draw (6.5mm,-1mm) -- (-4mm,-1mm);
+        \draw (23mm,-152mm) -- (-4mm,-152mm);
+        \draw[latex-latex] (-2mm,-1mm) -- (-2mm,-152mm);
+
+        % Horizontal measurement
+        \node at (40mm,-163mm) {\SI{750}{\milli\meter}};
+        \draw (0.5mm,-150mm) -- (0.5mm,-168mm);
+        \draw (80mm,-150mm) -- (80mm,-168mm);
+        \draw[latex-latex] (0.5mm,-166mm) -- (80mm,-166mm);
+
+    \end{scope}
+\end{tikzpicture}

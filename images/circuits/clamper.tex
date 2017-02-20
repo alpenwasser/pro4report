@@ -1,0 +1,28 @@
+\begin{circuitikz}
+    \small
+
+    \draw
+    (-1,0) node[ocirc] {\hspace*{-1.5em}IN} -- (0,0)
+    to[C,l^=$\mathrm{C_{in}}$]
+    (1,0) to[R,l^=$\mathrm{R_{in}}$]
+    (5,0) node[circ] { } --
+    (7,0) node[circ] { } --
+    (9,0) node[ocirc] {~~OUT};
+    %(8,0) to[R,l^=$\mathrm{R_{out}}$] (11,0)
+
+    \draw
+    (5,0) to[empty Zener diode,l_=D1] (5,2) --
+    (7,2) to[R,l^=$\mathrm{R_{pull-up}}$]
+    (7,0);
+
+    \draw
+    (7,0) to[R,l^=$\mathrm{R_{pull-down}}$]
+    (7,-2) --
+    (5,-2) to[empty Zener diode,l_=D2] (5,0);
+
+    \draw
+    (6,-2) node[circ] { } -- (6,-2.5) node[ocirc] {~~$\mathrm{V_{low}}$};
+
+    \draw
+    (6,2) node[circ] { } -- (6,2.5) node[ocirc] {~~$\mathrm{V_{high}}$};
+\end{circuitikz}

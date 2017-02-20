@@ -1,0 +1,42 @@
+\begin{tikzpicture}
+    \begin{scope}[x={(0mm,50mm)},y={(0mm,-80mm)},line width=1pt,cap=round]
+
+        \node[anchor=north west,inner sep=0pt] at (0,0) {%
+            \includegraphics[width=40mm,height=80mm]{images/solar-facility/pvmodule-wiring.jpeg}
+        };
+
+        % Horizontal Measurement (Wires)
+        % ==============================
+
+        % Horizontal measurement between wires
+        \draw (5mm,0mm) -- (5mm,4mm); % Vertical line
+        \draw (11mm,0mm) -- (11mm,4mm);   % Vertical line
+
+        % Measurement arrow
+        \draw[-latex] (4mm,2mm) -- (5mm,2mm);
+        \draw[-] (4mm,2mm) -- (31.5mm,2mm);
+        \draw[latex-] (11mm,2mm) -- (12mm,2mm);
+
+        % Measurment
+        \node[anchor=west] at (12mm,3.75mm) {\small$d = \SI{127}{\milli\meter}$};
+
+
+        % Vertical measurement (Wires)
+        % ============================
+        \draw (4mm,-1.5mm) -- (-4mm,-1.5mm); % horizontal line
+        \draw (4mm,-78.5mm) -- (-4mm,-78.5mm); % horizontal line
+
+        \draw[latex-latex] (-2mm,-1.5mm) -- (-2mm,-78.5mm); % measurement line
+
+        % Measurement
+        \node[rotate=90] at (-3.75mm,-38.5mm) {\small$l = \SI{1550}{\milli\meter}$};
+
+        \node at (5mm,-82.5mm) {\small 1};
+        \node at (11mm,-82.5mm) {\small 2};
+        \node at (17mm,-82.5mm) {\small 3};
+        \node at (23mm,-82.5mm) {\small 3};
+        \node at (29mm,-82.5mm) {\small 2};
+        \node at (35.5mm,-82.5mm) {\small 1};
+    \end{scope}
+\end{tikzpicture}
+

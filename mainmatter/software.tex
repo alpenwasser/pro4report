@@ -1,0 +1,75 @@
+% **************************************************************************** %
+\chapter{Software}
+\label{chap:software}
+% **************************************************************************** %
+
+Die  Software   unseres  Systems   gliedert  sich   analog  zur   Hardware  in
+zwei  prim\"are  Teile: Die   Firmware  des  Sensors  und   die  Software  des
+Masters.
+
+In  Abschnitt  \ref{sec:fw:dataFlow} wird  im  Folgenden  kurz dargelegt,  wie
+diese beiden  Teilsysteme verkn\"upft sind. Anschliessend  erkl\"art Abschnitt
+\ref{sec:firmware:sensor}  die Funktionsweise  der  Firmware des  Sensors. Die
+Software des \Raspi~ ist  abschliessend in Abschnitt \ref{sec:software:master}
+dokumentiert.
+
+
+{\begin{a3pages}
+\setlength{\parindentbak}{\parindent}
+    \noindent\adjustbox{valign=t}{\begin{minipage}{115mm}
+    % ---------------------------------------------------------------------------- %
+    \section{Datenfluss}
+    \label{sec:fw:dataFlow}
+    % ---------------------------------------------------------------------------- %
+    Abbildung  \ref{fig:dataFlow}   zeigt  den   Ablauf  der   Spannungs-  und
+    Strommessung von den Messsonden bis zur Speicherung der Messergebnisse und
+    der zugeh\"origen Metadaten in der Datenbank.
+
+    \setlength{\parindent}{\parindentbak}  %   restore  paragraph  indentation
+    Die   Spannung  wird   in  jedem   PV-Modul  von   einem  Sensor   mittels
+    eines    analog/digital-Konverters   gemessen. Anschliessend    wird   ein
+    laufender  Durchschnittswert  (siehe  Abschnitt  \ref{subs:Sensor},  Seite
+    \pageref{subs:Sensor})  zusammen mit  der Serienummer  des Microchips  und
+    einer  Checksumme in  ein  Datenpaket gepackt  und  \"uber die  DC-Leitung
+    verschickt.
+
+    Die   ON-OFF    Keying-Schaltung   benutzt   als   Referenz    den   Clock
+    eines     separaten,     spannungsgesteuerten    Oszillators     (englisch
+    \emph{voltage-controlled oscillator}, VCO).
+
+    Im  \Master~  wird das  Datenpaket  entpackt  und auf  seine  Integrit\"at
+    gepr\"uft.   Passt die  Pr\"ufsumme nicht  zu  den Daten,  wird das  Paket
+    verworfen. Sind  die Daten  intakt  (bzw. wird  keine Diskrepanz  zwischen
+    Pr\"ufsumme und  Daten festgestellt),  werden Spannung und  Serienummer im
+    zugeh\"origen Table der Datenbank gespeichert. Zur chronologischen Ordnung
+    der Daten wird  noch ein Timestamp abgelegt. Damit man  weiss, aus welchem
+    Strang das Paket gekommen ist, wird  die Strang-Nummer noch in den Eintrag
+    eingef\"ugt.
+
+    Die  Messung der  Strang-Str\"ome  erfolgt direkt  vom  \Master~ aus;  die
+    zugeh\"origen Messwerte werden in einem separaten Table abgelegt.
+
+    Zur  Verwaltung  der  installierten  Sensoren  und  PV-Module  wird  f\"ur
+    jeden  Strang  ein  Table  gef\"uhrt,  in  dem  die  Serienummern  der  in
+    diesem Strang  installierten Sensoren (bzw. deren  Microchips) gespeichert
+    sind. Die  Eintr\"age  in  diesen  Tables erfolgen  automatisch,  wenn  in
+    einem ankommenden  Datenpaket eine bisher noch  nicht bekannte Serienummer
+    detektiert wird.
+
+    \vspace*{40mm}
+
+    \hfill\adjustbox{valign=t}{\begin{minipage}{50mm}
+        \figcaption
+        [Datenfluss von Messungen bis Speicherung]
+        {%
+            Datenfluss von den Messungen der Modulspannungen und Strang-Str\"ome bis
+            zur Speicherung in der Datenbank%
+        }
+        \label{fig:dataFlow}
+    \end{minipage}}
+\end{minipage}}
+\hspace*{15mm}
+\adjustbox{valign=t}{\begin{minipage}{215mm}
+    \input{images/software/dataFlow.tex}
+\end{minipage}}
+\end{a3pages}}

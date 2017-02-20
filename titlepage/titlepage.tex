@@ -1,5 +1,6 @@
 \begin{titlingpage}
 
+    %\bfseries
 
     % ---------------------------------------------------- %
     % Main Info on Contents                                %
@@ -37,7 +38,7 @@
             [4mm]
 
             \textsc{\textbf{Version}}
-            & 0.1 \\
+            & 1.0 \\
         \end{tabular}%
     }%
 
@@ -57,18 +58,26 @@
         \node[inner sep=0pt] at (current page.center) {%
             \includegraphics[width=\paperwidth,height=\paperheight]{images/titlepage/titlepic.jpg}%
         };
+        %\node[
+        %    fill=white,
+        %    fill opacity=0.5,
+        %    inner sep=0pt,
+        %    anchor=west
+        %] at (-38.5mm,-105mm) {%
+        %    \input{images/python/title.pgf}%
+        %};
 
         % ------------------------------------------------ %
         % Info Table                                       %
         % ------------------------------------------------ %
         \node[%
             fill=black,
-            fill opacity=0.75,
-            rounded corners,
+            fill opacity=0.8,
+            rounded corners=10mm,
             outer sep=0pt,
-            inner sep=1em,
+            inner sep=2em,
             yshift=9em,
-            anchor = south%
+            anchor = south,
         ] at (current page.south) {\textcolor{white}{\infotable}};
 
         % ------------------------------------------------ %

@@ -2,4 +2,49 @@
 \chapter*{Abstract}
 \label{chap:abstract}
 % **************************************************************************** %
+\enlargethispage{2em}
 
+This project's  aim was to develop  a system for real-time  monitoring of each
+panel  of a  photovoltaic facility.   The  system must  be cost-effective  and
+should scale  from small single-household solutions  to large industrial-scale
+solar  farms. Panels which  are not  operating at  full capacity  for whatever
+reason (dirt, shade,  defects) must be detected and the  user informed so that
+appropriate measures (cleaning, replacement) can be taken.
+
+Monitoring  of  the  individual  photovoltaic modules  allows  the  facility's
+operator to  optimally run  their solar  plant, thus  reducing losses  in both
+power output and profit.
+
+Current solutions for per-module monitoring  of solar facilities are expensive
+and often left  out to save costs.   As alternative sources of  energy such as
+wind and  solar power  grow in  importance, the overall  losses in  the energy
+industry of power  and money incurred due to insufficient  monitoring of solar
+facilities will become unsustainable.
+
+Our  system  has  two  primary components: A  controller  which  is  installed
+centrally  near  the  inverter  and  a  sensor  on  each  photovoltaic  panel.
+Communication between the sensors and the  master is routed through the direct
+current power  transmission line;  no additional wiring  is needed. A  coil is
+used to couple the signal to the power line. In case of an error (e.g. a dirty
+panel), an error message is sent to a user-configurable phone number.
+
+Simulations for  various coupling methods  for a string  of 20 PV  panels have
+been performed. Inductive  coupling at  non-resonance conditions results  in a
+signal  level  of roughly  \SI{6}{\milli\volt}  peak-to-peak  at the  receiver
+without  amplification. Operating  the  circuit  at resonance  yields  a  much
+improved peak-to-peak  voltage of \SI{250}{\milli\volt} at  the receiver (also
+without amplification), which is sufficient for our purposes.
+
+A  frequency sweep  for  the coupling  coil has  been  measured and  inductive
+behavior up to  \SI{20}{\mega\hertz} verified, thus ensuring that  the coil is
+adaptable enough to allow the use of a vast range of frequencies as needed.
+
+The system's components have been implemented. A  signal can be coupled to the
+DC transmission line  and the sensor can perform  correct voltage measurements
+and return that  data. Both the graphical user interface on  the master device
+and its database back-end are functioning.
+
+\vspace{2em}
+\textbf{Key  words:}  photovoltaic  technology,  photovoltaic  module,  remote
+monitoring, solar technology, PV cell, power efficiency, alternative energy,
+powerline, communication, inductive coupling, capacitive coupling

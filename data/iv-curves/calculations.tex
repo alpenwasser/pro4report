@@ -1,0 +1,73 @@
+% ---------------------------------------------------------------------------- %
+% Performance Calculations
+%
+% Based on:
+% http://tex.stackexchange.com/questions/185488/pgfplots-read-data-calculate-diagram#186016
+% see also p56 of pgfplotstable manual:
+% http://pgfplots.sourceforge.net/pgfplotstable.pdf
+% ---------------------------------------------------------------------------- %
+
+% \IfFileExists{./filename}{true branch}{false branch}
+% NOTE: without the preceding './', \IfFileExists will check the entire tex path
+
+\IfFileExists{./data/iv-curves/module-72cells-series--reference--all-ok--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-72cells-series--reference--all-ok.dat}
+            {data/iv-curves/module-72cells-series--reference--all-ok--power.dat}
+    }
+
+\IfFileExists{./data/iv-curves/module-72cells-series--reference--ifail-5A--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-72cells-series--reference--ifail-5A.dat}
+            {data/iv-curves/module-72cells-series--reference--ifail-5A--power.dat}
+    }
+\IfFileExists{./data/iv-curves/module-72cells-series--reference--ifail-1A--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-72cells-series--reference--ifail-1A.dat}
+            {data/iv-curves/module-72cells-series--reference--ifail-1A--power.dat}
+    }
+\IfFileExists{./data/iv-curves/module-string-complete--all-ok--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-string-complete--all-ok.dat}
+            {data/iv-curves/module-string-complete--all-ok--power.dat}
+    }
+\IfFileExists{./data/iv-curves/module-string-complete--ifail-5A--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-string-complete--ifail-5A.dat}
+            {data/iv-curves/module-string-complete--ifail-5A--power.dat}
+    }
+\IfFileExists{./data/iv-curves/module-string-complete--ifail-1A--power.dat}
+    { }
+    {
+        \pgfplotstablesave[
+            create on use/power output/.style={create col/expr={\thisrow{V(out)} * \thisrow{I(R_load)}}},
+            columns={V(out),power output},
+        ]
+            {data/iv-curves/module-string-complete--ifail-1A.dat}
+            {data/iv-curves/module-string-complete--ifail-1A--power.dat}
+    }

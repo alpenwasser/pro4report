@@ -1,0 +1,74 @@
+\documentclass[a4paper]{article}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.12}
+\begin{document}
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0mm)},y={(100mm,140mm)}]
+        \begin{axis}[
+            height=100mm,
+            width=140mm,
+            width=\textwidth,
+            grid=both,
+            zmin=0,
+            thick,
+            xlabel=Spannung,
+            ylabel=Strom,
+            zlabel=Leistung,
+            legend style={at={(0,-0.15)},anchor=north west},
+            legend cell align=left,
+        ]
+            % 10A
+            \addplot3[
+                %draw=blue,
+                draw=cyan,
+                scatter src = \thisrow{I(R_load)},
+            ] table[z expr=0] {3d.dat};
+            \addplot3[
+                %draw=blue,
+                draw=teal,
+                scatter src = \thisrow{power},
+            ] table[y expr=10] {3d.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{V(out)},
+            ] table[x expr=0] {3d.dat};
+            \addplot3[
+                %draw=blue,
+                draw=magenta,
+                very thick,
+            ] table {3d.dat};
+
+            % 1A
+            %\legend{Leistung,IV,PV,PI}
+            \addplot3[
+                %draw=blue,
+                draw=cyan,
+                scatter src = \thisrow{I(R_load)},
+            ] table[z expr=0] {3d2.dat};
+            \addplot3[
+                %draw=blue,
+                draw=teal,
+                scatter src = \thisrow{power},
+            ] table[y expr=10] {3d2.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{V(out)},
+            ] table[x expr=0] {3d2.dat};
+            \addplot3[
+                %draw=blue,
+                draw=magenta,
+                very thick,
+            ] table {3d2.dat};
+            \legend{
+                Leistung-Spannung,
+                Leistung-Strom,
+                Strom-Spannung,
+                Leistung \"uber Strom und Spannung,
+            }
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}
+\end{document}

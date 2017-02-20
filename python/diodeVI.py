@@ -32,12 +32,12 @@ vi_rev_lambd2  = sp.lambdify(U,vi_rev_2,modules=['numpy'])
 lower        = -0.9
 upper        =  0.9
 u_pos        = np.linspace(0,upper,300)
-u_pos_actual = np.linspace(0.4,upper,300)
+u_pos_actual = np.linspace(0.3,upper,300)
 u_rev        = np.linspace(lower,0,300)
 u_rev_actual = np.linspace(lower,-0.4,300)
 u            = np.linspace(-0.4,0.4,300)
-u_rev_fill   = np.linspace(-0.5,0,500)
-u_rev_fill_2 = np.linspace(-0.57,-0.4995,500)
+u_rev_fill   = np.linspace(-0.2,0.005,500)
+u_rev_fill_2 = np.linspace(-0.57,-0.1998,500)
 
 plt.rc('text',usetex=True)
 plt.rc('font',family='serif',size=11)
@@ -65,8 +65,8 @@ ax1.plot(u, 4.525*np.tanh(15*u)-0.5, label=r"Strom", color="blue")
 ax1.plot([lower,upper],[0,0],color="black")
 ax1.plot([0.005,0.005],[-20,20],color="black")
 #ax1.arrow(x,y,dx,dy,...)
-ax1.arrow(0.7,0,0.1,0, fc="k", ec="k",head_width=2,head_length=0.05)
-ax1.arrow(0.005,15,0,2, fc="k", ec="k",head_width=0.05,head_length=2)
+ax1.arrow(0.7,0,0.1,0, fc="k", ec="k",head_width=2,head_length=0.05,linewidth=0.5)
+ax1.arrow(0.005,15,0,2, fc="k", ec="k",head_width=0.05,head_length=2,linewidth=0.5)
 
 # Fill for IS
 ax1.fill_between(u_rev_fill,4.525 * np.tanh(15*u_rev_fill)-0.5, 0, color="magenta", alpha="0.5",lw=0)
@@ -82,9 +82,9 @@ ax1.set_ylabel('Strom (A)')
 ax1.get_xaxis().set_ticks([])
 ax1.get_yaxis().set_ticks([])
 
-fig1.subplots_adjust(bottom=0.2,top=0.85,left=0.2,right=0.95)
+fig1.subplots_adjust(bottom=0.1,top=0.90,left=0.1,right=0.9)
 fig1.set_figwidth(4.5)
-fig1.set_figheight(3)
+fig1.set_figheight(4)
 fig1.savefig('../images/python/diodeVI.pgf')
 #fig1.savefig('diodeVI.pgf')
 

@@ -1,0 +1,9 @@
+\begin{circuitikz}
+    \draw
+    (0,0) to[empty photodiode,o-,l_=PV-Modul] (1,0) to[short] (10,0) node[ocirc] { }
+
+    (3,0) node[circ] { } to[C,l^=Kopplung] (3,-1.5) to[sinusoidal voltage source,l^=$U_{\mathrm{Sender}}$] (3,-3) node[sground] { }
+
+    (9,0) node[circ] { } to[C,l^=Kopplung] (9,-1.5) -- (9,-3) node[ocirc] {~~$U_{\mathrm{Receiver}}$};
+    ;
+\end{circuitikz}

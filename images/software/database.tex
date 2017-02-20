@@ -1,0 +1,80 @@
+\begin{tikzpicture}
+    \sffamily
+    \small
+    %\graph [left anchor=east,grow right sep,right anchor=west,grow right,branch down,nodes={rounded rectangle,draw}]
+    \begin{scope}[
+            every node/.style = {
+                draw = solarized-base02,
+                rounded rectangle,
+                fill=solarized-base2,
+                text=solarized-base02,
+                inner sep=1mm,
+                text height=0.7em,
+            },
+            node distance=3mm,
+            table/.style={
+                fill=solarized-cyan,
+                text=solarized-base2,
+                inner sep=2mm,
+            },
+            column/.style={
+                minimum width=25mm,
+            }
+        ]
+        \node (database)[
+            fill=solarized-blue,
+            text=solarized-base2,
+            inner sep=2mm
+        ] at (0,0) {Datenbank};
+
+        \node (strings)   [table,below left=15mm of database] {strings};
+        \node (sID)       [column,below right=12mm of strings] {ID};
+        \node (sStringNo) [column,below=of sID]            {stringnumber};
+        \node (sCurr)     [column,below=of sStringNo]      {stringcurrent};
+        \node (sTs)       [column,below=of sCurr]          {timestamp};
+        \node (sDev)      [column,below=of sTs]            {deviation};
+        \node (sReported) [column,below=of sDev]           {flag\_reported};
+
+        \node (panels)    [table,left=of strings]  {panels};
+        \node (pID)       [column,below left=12mm of panels]    {ID};
+        \node (pSerial)   [column,below=of pID]       {serialnumber};
+        \node (pVoltage)  [column,below=of pSerial]   {voltage};
+        \node (pStringNo) [column,below=of pVoltage]  {stringnumber};
+        \node (pTs)       [column,below=of pStringNo] {timestamp};
+        \node (pDev)      [column,below=of pTs]       {deviation};
+        \node (pReported) [column,below=of pDev]      {flag\_reported};
+
+        \node (string1)  [table,below right=15mm of database] {string\{1,2,3\}};
+        \node (s1ID)     [column,below right=12mm of string1]        {ID};
+        \node (s1Serial) [column,below=of s1ID]           {serialnumber};
+    \end{scope}
+    \begin{scope}[on background layer]
+    \end{scope}
+
+    \begin{scope}[
+            rounded corners,
+            draw=solarized-base02
+        ] % connections
+        \draw[-latex] (database) -| (panels);
+        \draw[-latex] (database) -| (strings);
+        \draw[-latex] (database) -| (string1);
+
+        \draw[-latex] (panels) |- (pID);
+        \draw[-latex] (panels) |- (pSerial);
+        \draw[-latex] (panels) |-  (pVoltage);
+        \draw[-latex] (panels) |-  (pStringNo);
+        \draw[-latex] (panels) |-  (pTs);
+        \draw[-latex] (panels) |-  (pDev);
+        \draw[-latex] (panels) |-  (pReported);
+
+        \draw[-latex] (strings) |- (sID);
+        \draw[-latex] (strings) |- (sStringNo);
+        \draw[-latex] (strings) |- (sCurr);
+        \draw[-latex] (strings) |- (sTs);
+        \draw[-latex] (strings) |- (sDev);
+        \draw[-latex] (strings) |- (sReported);
+
+        \draw[-latex] (string1) |- (s1ID);
+        \draw[-latex] (string1) |- (s1Serial);
+    \end{scope}
+\end{tikzpicture}

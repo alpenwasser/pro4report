@@ -1,0 +1,187 @@
+% **************************************************************************** %
+\chapter{Validierung}
+\label{chap:validierung}
+% **************************************************************************** %
+
+Im Folgenden werden  Messungen unserer Kopplungsspule, des  Modulators und des
+Demodulators sowie eine Evaluation unseres Gesamtsystems pr\"asentiert.
+
+% ---------------------------------------------------------------------------- %
+\section{Kopplungsspule}
+\label{sec:val:coupling:coil}
+% ---------------------------------------------------------------------------- %
+
+Eine  Spule  leitet nicht  alle  Frequenzen  gleich gut. Zudem  s\"attigt  ein
+Ferritkern  ab einem  bestimmten  Strom. Deswegen  werden Frequenzg\"ange  der
+Spule mit dem Ferritkern und  ein Power-Choke Test mit einer Sekund\"arwindung
+gemacht.
+
+Es   wird   die   Induktivit\"at   einer  Spule   getestet,   welche   mehrere
+Windungen  \"ubereinander  hat  und  einer  Spule,  welche  nur  eine  Schicht
+mit  Wicklungen   hat. Beide  Spulen   haben  genau  30   Wicklungen. Wie  man
+Abbildung~\ref{fig:meas:coupling:coil:L}  entnehmen kann,  ist  die Spule  mit
+nur  einer Wicklungsschicht  bis  \"uber 20  Megahertz  induktiv (blaue  Kurve
+in Abbildung  \ref{fig:meas:coupling:coil:L}), w\"ahrend  die Multilayer-Spule
+schon   bei   4   Megahertz   kapazitiv  wird   (rote   Kurve   in   Abbildung
+\ref{fig:meas:coupling:coil:L}). F\"ur  unser   Projekt  haben   wir  deswegen
+die  einschichtige  Spule   gew\"ahlt. Eine  Messung  der  Streuinduktivit\"at
+der   gew\"ahlten  Spule   ist  ebenfalls   gemacht  worden,   um  gut   damit
+rechnen   und   simulieren   zu   k\"onnen   (gr\"une   Kurve   in   Abbildung
+\ref{fig:meas:coupling:coil:L}).
+
+\clearpage
+\begin{figure}[h!tb]
+    \centering
+    \input{images/fsk-meas/frequency_sweep_Ls.pgf}
+    \caption[Messresultate Kopplungsspule: Induktivit\"at]{Induktivit\"atsmessung der gew\"ahlten Spule}
+    \label{fig:meas:coupling:coil:L}
+\end{figure}
+
+Die  Power-Choke-Tests sind  nur  f\"ur die  gew\"ahlte Einlayerspule  gemacht
+worden. Daf\"ur  wird durch  den Kern  eine kurzgeschlossene  Prim\"arwicklung
+gef\"uhrt,   welche   dem   Aufbau  des   Endproduktes   entspricht. Wie   man
+Abbildung~\ref{fig:meas:coupling:coil:power_choke:1}  entnehmen kann,  beginnt
+der  Kern bei  ungef\"ahr  \SI{2}{\ampere}, zu  s\"attigen. Die beiden  Kurven
+basieren   auf  zwei   verschiedenen   Messmethoden  (inkrementelle   Messung,
+blaue  Kurve,  und  Sekantenmessung,  gr\"une  Kurve),  wobei  wir  hier  eher
+der  inkrementellen  Messung Beachtung  schenken,  da  hier der  Kurvenverlauf
+schlechter ausf\"allt und  wir mit dem Worst  Case-Szenario planen wollen. Uns
+interessiert  hier prim\"ar  die  Stromabh\"angigkeit der  Induktivit\"at. Das
+Stromver\"altnis im Trafo ist durch Gleichung \ref{eq:trafo} gegeben:
+
+\begin{equation}\label{eq:trafo}
+    I_{\mathrm{secondary}} = \frac{I_{\mathrm{primary}} \cdot N_{\mathrm{primary}}}{N_{\mathrm{secondary}}}
+\end{equation}
+
+Somit  k\"onnen   wir  bei  30   Windungen  auf  der  Prim\"arseite   auf  der
+Sekund\"arseite \SI{60}{\ampere}  f\"uhren, ohne  den Kern  zu s\"attigen. Bei
+den \SI{10}{\ampere},  die die Stromzufuhr  maximal etwa f\"uhrt  (Strom eines
+Modulstrangs), ist dies mehr als ausreichend.
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/fsk-meas/power_choke_I.pgf}
+    \caption[Messresultate Kopplungsspule: Kerns\"attigung \"uber Strom]{Kerns\"attigung der gew\"ahlten Spule in Abh\"angigkeit von I in Form der Induktivit\"at}
+    \label{fig:meas:coupling:coil:power_choke:1}
+\end{figure}
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Modulator}
+\label{sec:val:modulator}
+% ---------------------------------------------------------------------------- %
+
+Bei Modulator ist es besonders wichtig, ein sch\"ones Signal zu haben.
+
+Abbildungen                    ~\ref{fig:meas:scope:0},~\ref{fig:meas:scope:1}
+und~\ref{fig:meas:scope:6}  zeigen  die  Spannungsverl\"aufe  am  Ausgang  des
+Oszillators.   Wie  man  an  den  Kurven erkennen  kann,  produziert  der  VCO
+ein  eigentlich  sch\"ones  Signal. Jedoch  gibt es  jeweils  bei  der  Flanke
+\"Uberschwinger. Auch  ist  das  Signal  ziemlich  eckig,  was  nicht  optimal
+ist. Dem kann mit einem Tiefpassfilter entgegengewirkt werden.
+
+Leider produziert der  VCO ab und zu auch  mysteri\"ose Irregularit\"aten, wie
+in Abbildung~\ref{lst:meas:scope:1}  gezeigt. Da der 74HC4640, zu  dem der VCO
+geh\"ort, auch sonst nicht so funktioniert, wie es dem Datenblatt zu entnehmen
+ist, k\"onnte es sein, dass diese Irregularit\"aten vom Chip stammen. Sehr gut
+m\"oglich ist aber auch, dass dort  ein anderes Signal eingekoppelt wird, oder
+dass es auf einen Messfehler zur\"uckzuf\"uhren ist.
+
+Die  Oszilloskop-Einstellungen  sind  im  Anhang~\ref{app:scope:settings}  auf
+Seite ~\pageref{app:scope:settings} zu finden.
+
+\vspace*{7em}
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_0b.png}
+    \caption{$VCO_{\mathrm{out}}$ zoomed in, Parameter in Listing \ref{lst:meas:scope:0}}
+    \label{fig:meas:scope:0}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_1b.png}
+    \caption{$VCO_{\mathrm{out}}$ mit St\"orungen, Parameter in Listing \ref{lst:meas:scope:1}}
+    \label{fig:meas:scope:1}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_6b.png}
+    \caption{$VCO_{\mathrm{out}}$ zoomed out, Parameter in Listing \ref{lst:meas:scope:6}}
+    \label{fig:meas:scope:6}
+\end{figure}
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Demodulator}
+\label{sec:val:demodulator}
+% ---------------------------------------------------------------------------- %
+
+Beim  Demodulator  ist  es   wichtig,  dass  die  Schaltflanken  einigermassen
+Steil  sind  und   der  Signalverlauf  ansonsten  konstant.    Dass  dies  der
+Fall ist,  kann den Abbildungen~\ref{fig:meas:scope:7},~\ref{fig:meas:scope:8}
+und~\ref{fig:meas:scope:9} entnommen  werden.  Man sieht, dass  die Schaltzeit
+etwa  \SI{2}{\micro\second} betr\"agt. Wenn  man nun  mit 9600  Baud empfangen
+w\"urde, erg\"abe dies eine Periode von \SI{104}{\micro\second}.  Damit w\"are
+die Schaltzeit lediglich  3.8 Prozent, was reibungslos  funktioniert, wie auch
+gut in  Grafik \ref{fig:meas:scope:8} zu  erkennen ist.  Ein Problem,  was auf
+den Grafiken  gut sichtbar ist,  ist die geringe Amplitude. Dem  wird mithilfe
+eines Verst\"arkers entgegengewirkt, welcher die Signalamplitude verdoppelt.
+
+\vspace*{7em}
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_7b.png}
+    \caption{Steigende Flanke des Demodulators, Parameter in Listing \ref{lst:meas:scope:7}}
+    \label{fig:meas:scope:7}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_8b.png}
+    \caption{Steigende Flanke des Demodulators im Makroskopischen, Parameter in Listing \ref{lst:meas:scope:8}}
+    \label{fig:meas:scope:8}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.9\textwidth, trim=0mm 21mm 0mm 11mm, clip]{images/scopeShots/scope_9b.png}
+    \caption{Steigende Flanke  des Demodulators, Parameter in Listing \ref{lst:meas:scope:9}}
+    \label{fig:meas:scope:9}
+\end{figure}
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Gesamtsystem}
+\label{sec:validierung:total}
+% ---------------------------------------------------------------------------- %
+
+Wie  in den  vorherigen Abschnitten  dokumentiert ist,  sind alle  Teilsysteme
+getestet und  funktionst\"uchtig.  Am Sensorboard m\"ussen  einige Anpassungen
+zum Einstellen der Tr\"agerfrequenz der OOSK gemacht werden. Des Weiteren muss
+am Demodulator der  Verst\"arker in Betrieb genommen werden, da  im Moment die
+empfangene  Signalamplitude zu  klein  ist, ansonsten  aber  in Ordnung.   Die
+Modulation und Demodulation  sind separat getestet. Nun ist  es wichtig, diese
+im  Zusammenspiel zu  testen. Dank ansonsten  funktionst\"uchtigem Sensorboard
+mit kompletter Firmware sollte dies einfach m\"oglich sein.
+
+Beim Master sieht  die Lage \"ahnlich aus. Bis auf die  Strommessung sind alle
+Teilkomponenten  erfolgreich getestet. Diese  m\"ussten  jetzt im  Vollbetrieb
+validiert werden, da dies Aufgrund fehlender Kommunikation der Sensoren bisher
+weggefallen ist.
+
+Softwareseitig   ist  der   Master   auf  gutem   Wege.    Das  Auslesen   und
+Auswerten  der  Sensoren  ist  \"uber eine  normale  UART-Verbindung  getestet
+und  funktioniert. Das  GUI wird  angesteuert  und  eine  Fehlermeldung  wird
+ausgel\"ost,  wenn  ein  Modul  defekt   ist.   Jedoch  fehlt  ein  wenig  der
+Feinschliff. So fehlt  noch die  Ansteuerungssoftware f\"ur  das GSM-Modul. Da
+dieses  voll   integriert  ist,  kann   dies  angenehm  \"uber   ein  two-wire
+Interface gemacht werden  und ist ein  einfacher Task, sobald  die restlichen
+Teilsysteme  laufen.  Die  Ansteuerung der  Strommessung ist  entwickelt, aber
+noch nicht getestet.  Zu guter Letzt  ist eine gute Abrundung wichtig. So muss
+zum Beispiel noch der Button zum Ein- und Ausschalten des Displays angesteuert
+werden.

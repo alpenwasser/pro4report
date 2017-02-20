@@ -1,0 +1,67 @@
+% **************************************************************************** %
+\chapter{Einleitung}
+\label{chap:einleitung}
+% **************************************************************************** %
+
+In Zeiten der Energiewende  sind Photovoltaikanlagen kein Nischenprodukt mehr.
+Um die Abh\"angigkeit vom Erd\"ol  zu verringern, werden vielerorts Anlagen in
+allen Gr\"ossen  gebaut; von kleinen Installationen  f\"ur Einfamilienh\"auser
+bis zu Anlagen,  welche einem normalen Kraftwerk in Sachen  Leistung die Stirn
+bieten k\"onnen.  Die  Sonnenstrahlung, welche kostenlos von  der Sonne kommt,
+wird  in elektrische  Energie  umgewandelt  und kann  gleich  vor Ort  genutzt
+werden.   PV-Anlagen sind  teuer,  weshalb  Anlagenbesitzer darauf  angewiesen
+sind,  dass diese  den maximalen  Ertrag liefern. Das  ist in  der Regel  ohne
+grossen  Aufwand  der  Fall.   Doch  es gibt  Umst\"ande,  unter  welchen  die
+Effizienz  einer  Photovoltaikanlage  sich   erheblich  verringern  kann,  und
+h\"aufig wird dies  nicht oder nur mit bedeutender  Verz\"ogerung bemerkt.  In
+einer  Photovoltaikanlage werden  \"ublicherweise mehrere  PV-Module zu  einem
+String zusammengefasst, indem sie  in Serie geschaltet werden. Dabei reduziert
+ein abgeschattetes,  verschmutztes oder  gar defektes  Modul den  Strom dieser
+Serieschaltung  und  beeintr\"achtigt somit  auch  die  Leistung des  gesamten
+Strings und der Anlage stark. Dies hat grosse finanzielle Einbussen zur Folge.
+
+Das Ziel des  Projektes P4 ist es, ein  PV-\"Uberwachungssystem zu entwickeln,
+um bei  Szenarien wie dem  oben geschilderten Abhilfe zu  schaffen. Das System
+soll aus  einer Sensorplatine  und einem zentralen  Meldeger\"at bestehen. Die
+Sensorplatine wird  beim PV-Modul  eingebaut und \"uberwacht  dessen Spannung,
+das   zentrale  Meldeger\"at   wird  im   Schaltschrank  beim   Wechselrichter
+installiert. Die Kommunikation zwischen den  beiden Komponenten erfolgt \"uber
+die  zur  Energie\"ubertragung  benutzte  DC-Leitung;  es  werden  also  keine
+zus\"atzlichen Datenleitungen ben\"otigt.
+
+Das Master-Ger\"at wertet die gemessenen  Spannungen der Module aus und l\"ost
+beim Erkennen eines  fehlerhaften Moduls einen Alarm am  Ger\"at selbst, lokal
+in der PV-Anlage via Relais (z.B. Sirene oder Warnlampe) und per SMS aus.  Das
+System  soll m\"oglichst  energieeffizient  und kosteng\"unstig  sein, um  die
+Wirtschaftlichkeit einer Photovoltaikanlage nicht zu verschlechtern.
+
+Das  Hauptproblem  eines solchen  Systems  liegt  bei der  Signal\"ubertragung
+\"uber  die  DC-Leitung  der   Photovoltaikanlage. Denn  die  Spannung  darauf
+schwankt  zwischen 12  und  60  Volt an  der  Sensorplatine  und betr\"agt  am
+Masterger\"at bis zu 1000 Volt. Auf dieser Leitung ein Signal zu \"ubertragen,
+ist schwierig  und wird heutzutage  kaum gemacht. Unsere L\"osung  koppelt mit
+einer Spule  und dem Effekt  der Induktivit\"at  ein Signal in  die DC-Leitung
+ein, was uns das \"Ubertragen von  Daten erlaubt. Die Spule wird von einem auf
+dem  Sensor  platzierten Mikrocontroller  gesteuert,  der  die Spannung  misst
+und  die  Messdaten  zum  Versenden  vorbereitet. Das  Master-Ger\"at  besitzt
+eine  grafische  Benutzeroberfl\"ache zur  Interaktion  mit  dem Benutzer  und
+benutzt  eine Datenbank  zum Verwalten  der Messdaten.   Zudem ist  das System
+darauf optimiert, m\"oglichst  wenig Leistung zu verbrauchen,  um nicht selbst
+bedeutende Zusatzkosten im Betrieb zu verursachen.
+
+Der   vorliegende  Bericht   stellt  die   technische  Dokumentation   unseres
+Systems   dar. Das   Kapitel  \emph{\titleref{chap:uberblick}}   bietet   eine
+kurze  Einf\"uhrung  in   die  Thematik  von  PV-Anlagen;   der  Aufbau  einer
+\"ublichen  PV-Anlage  wird  kurz   erl\"autert,  um  anschliessend  die  oben
+Problematik  von Leistungsverlusten  zu  untersuchen. Ebenfalls werden  einige
+Grundinformationen  zur  Signalmodulation  gegeben.  Anschliessend  werden  in
+den  Kapiteln  \emph{\titleref{chap:models}}  und  \emph{\titleref{chap:simu}}
+verschiedene     verfolgte    L\"osungsvarianten     modelliert    und     mit
+Simulationen  in  \code{LTspice}   untersucht. Die  schlussendlich  gew\"ahlte
+L\"osung   mit    induktiver   Kopplung   ist   in    den   darauf   folgenden
+Kapiteln  \emph{\titleref{chap:hardware}} und  \emph{\titleref{chap:software}}
+dokumentiert.   Im   Kapitel  \emph{\titleref{chap:validierung}}   werden  das
+entwickelte  System   und  seine   Komponenten  mit   Labormessungen  kritisch
+untersucht, um letztlich  im \emph{\titleref{chap:fazit}} unseren Gesamterfolg
+zu beurteilen und auch  Empfehlungen f\"ur zuk\"unftige Weiterentwicklungen zu
+geben.

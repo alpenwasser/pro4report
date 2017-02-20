@@ -1,0 +1,38 @@
+\begin{tikzpicture}
+    \begin{scope}[x={(0mm,0.95\textwidth)},y={(0mm,100mm)}]
+        \begin{axis}[%
+                title=Spannung am Knoten \code{OUT},
+                height=45mm,
+                width=0.95\textwidth,
+                at={(0,50mm)},
+                grid=both,
+                xlabel=Zeit (\si{\milli\second}),
+                ylabel=Spannung (\si{\volt}),
+                change x base=true,
+                x SI prefix=milli,
+                xmin=0,
+                xmax=0.001,
+                yticklabel={\num[round-mode=places, round-precision=4]{\tick}},
+           ]
+           \addplot[-,blue] table[x=time, y=V(out)] {data/short-circuit/shortcircuit-single.dat};
+       \end{axis}
+        \begin{axis}[%
+                title=Strom Durch Mosfet,
+                height=45mm,
+                width=0.95\textwidth,
+                at={(0,0)},
+                grid=both,
+                xlabel=Zeit (\si{\milli\second}),
+                ylabel=Strom (\si{\micro\ampere}),
+                change x base=true,
+                change y base=true,
+                x SI prefix=milli,
+                y SI prefix=micro,
+                xmin=0,
+                xmax=0.001,
+                %yticklabel={\num[round-mode=places, round-precision=4]{\tick}},
+           ]
+           \addplot[-,blue] table[x=time, y=Id(Mos1)] {data/short-circuit/shortcircuit-single.dat};
+       \end{axis}
+   \end{scope}
+\end{tikzpicture}

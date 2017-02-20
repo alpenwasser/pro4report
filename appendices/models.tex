@@ -343,7 +343,9 @@ Nach einigen Iterationen liefert dieser Prozess\footnotemark:
 \end{align}
 
 Somit ist  das Modell  einer einzelnen  Zelle bestimmt  und kann  dazu benutzt
-werden,  ein   Modul  zu  modellieren. Wie  in   Anhang  \ref{app:simu:module}
+werden,  ein   Modul  zu  modellieren.
+
+Wie  in   Anhang  \ref{app:simu:module}
 ab  Seite   \pageref{app:simu:module}  erw\"ahnt,  werden   zwei  verschiedene
 Module   simuliert: Ein   Modul  mit   zwei   parallelen   Str\"angen  zu   je
 36  seriell   geschalteten  Zellen  (\fref{fig:ltspice:module:cellBased:36x2},
@@ -358,100 +360,279 @@ festgelegt,  die Stromquellen  im  $36 \times  2$-Modul  geben also  lediglich
 \pageref{tab:moduleData:IU}  mit Informationen  zu kommerziell  erh\"altlichen
 Solarmodulen scheint uns dieser Ansatz gerechtfertigt.
 
+\fref{fig:ltspice:solarCell}   zeigt   die  Implementation   unseres   Modells
+einer     Solarzelle      gem\"ass     \fref{fig:circuit:solarCell}     (Seite
+\pageref{fig:circuit:solarCell} in Abschnitt \ref{subsubsec:hw:ask:modell}) in
+\code{LTspice}.
+
+Ein MOSFET  wird benutzt, um  die Zelle  gesteuert (in unserer  Simulation bei
+einer Tr\"agerfrequenz von \SI{10}{\kilo\hertz}) kurzschliessen zu k\"onnen.
+
+Es    soll   das    f\"ur   den    MOSFET   schlimmere    Szenario   evaluiert
+werden   (mehr    Strom/Leistung   durch    den   MOSFET\todo{Korrekt?}). Dazu
+werden   aus  72   Zellen  zwei   verschiedene  Module   aufgebaut: Ein  Modul
+\"ahnlich    zum    Sunset   Solargenerator    AS150    \cite{ref:solar:as150}
+mit    ca. \SI{10}{\ampere}   Kurzschlussstrom    und   etwa    \SI{22}{\volt}
+Leerlaufspannung  (\fref{fig:ltspice:module:cellBased:36x2}),  und  ein  Modul
+\"ahnlich  zum Sunmodule  Pro-Series  XL SWB320  \cite{ref:solar:sunmodulePro}
+mit   \SI{10}{\ampere}   Kurzschlussstrom    und   ungef\"ahr   \SI{45}{\volt}
+Leerlaufspannung (\fref{fig:ltspice:module:cellBased:72x1}).
+
+Weil die gesamte Kapazit\"at bei in Serie geschalteten Kondensatoren sinkt und
+bei  paralleler  Anordnung steigt,  hat  die  $2 \times  36$-Parallelschaltung
+\todo{Bindestrich und Spaces?} etwa die doppelte Kapazit\"at des Einzelstrangs
+aus 72 Zellen. Der  durch den MOSFET fliessende Stroms, die  \"uber den MOSFET
+abfallende Spannung und die im  MOSFET dissipierte Leistung beim Durchschalten
+des Transistors sollen zwischen den beiden Szenarien verglichen werden.
+
+Die zu  diesen Schaltungen geh\"orenden \code{.asc}-Dateien  sind elektronisch
+verf\"ugbar  (Datentr\"ager  siehe Anhang  \ref{app:electronicStorage},  Seite
+\pageref{app:electronicStorage}).
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/singlecell.eps}
+    \caption{%
+        Schaltung        zur         Simulation        einer        Solarzelle
+        gem\"ass        Abbildung       \ref{fig:circuit:solarCell}        von
+        Seite     \pageref{fig:circuit:solarCell}. Die     Solarmodule     aus
+        den     Abbildungen    \ref{fig:ltspice:module:cellBased:36x2}     und
+        \ref{fig:ltspice:module:cellBased:72x1}  basieren auf  Zellen gem\"ass
+        diesem Schaltschema.%
+    }
+    \label{fig:ltspice:solarCell}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/module-72cells.eps}
+    \caption{%
+        Solarmodul     \"ahnlich     zu    Sunset     Solargenerator     AS150
+        \cite{ref:solar:as150}, modelliert durch 2  parallele Str\"ange mit je
+        36 Zellen gem\"ass Abbildung \ref{fig:ltspice:solarCell} in Serie.%
+    }
+    \label{fig:ltspice:module:cellBased:36x2}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/module-72cells-series.eps}
+    \caption{%
+        Solarmodul   \"ahnlich   zu   Sunmodule  Pro-Series   XL   SW320   aus
+        \cite{ref:solar:sunmodulePro},  modelliert durch  einen Strang  mit 72
+        Zellen gem\"ass Abbildung \ref{fig:ltspice:solarCell} in Serie.%
+    }
+    \label{fig:ltspice:module:cellBased:72x1}
+\end{figure}
+\todo{Transistoren aus Schaltbildern entfernen, IN/OUT benennen, Abbildung sollte nur Modul sein}
+
 
 % ---------------------------------------------------------------------------- %
+\clearpage
 \section{Vereinfachtes Modell f\"ur ein PV-Modul}
 \label{app:models:develop:module:simple}
 % ---------------------------------------------------------------------------- %
 
-Vereinfachtes  \code{LTspice}-Modell,  Verifikation anhand  von  verschiedenen
-Plots.
+Zur  Reduktion des  Rechenaufwands im  Vergleich zu  dem im  vorigen Abschnitt
+entwickelten Modell soll ein vereinfachtes Modell eines Solarmoduls entwickelt
+werden.
+
+Ausgangspunkt   ist   das   Eindiodenmodell    einer   Zelle   aus   Abbildung
+\todo{reference}, f\"ur  welches die Parameter  so angepasst werden,  dass das
+Verhalten des aus Zellen aufgebauten Modells aus dem vorigen Abschnitt und des
+vereinfachten Modells zufriedenstellend \"ubereinstimmen.
+
+Das Vorgehen ist dabei wie folgt: \todo{Eigentliche Werte}
+
+\begin{itemize}
+    \item
+        Die parasit\"are  Kapazit\"at des  Moduls wird angepasst  gem\"ass dem
+        Gesetz zur Serieschaltung von Kapazit\"aten:
+        $C_{\mathrm{p, Modul}} = C_{\mathrm{p, Zelle}} \div \text{Anzahl Zellen}$
+    \item
+        Der Seriewiderstand des Moduls ist die Summe der Seriewiderst\"ande aller
+        Zellen
+    \item
+        Der  Parallele   Widerstand  wird   entsprechend  der   Anzahl  Zellen
+        hochgerechnet.
+        \todo{kein Einfluss, verifikation}
+    \item
+        Der Reverse  Saturation Current  des Moduls ist  von der  Fl\"ache des
+        Moduls abh\"angig und  wird als Startwert vorerst  gem\"ass der Anzahl
+        Module hochgerechnet.
+    \item
+        Der  Idealit\"atsfaktor ist  ein Indikator  f\"ur den  Spannungsabfall
+        \"uber   einer   Diode   bei   einem   bestimmten   Strom   \todo{ref:
+        abbildung}. Bei  einer Serieschaltung  von Dioden  sollte entsprechend
+        mehr   Spannung    \"uber   dem   gesamten   Strang    abfallen   (bei
+        gleichbleibendem  Strom). Der Startwert  f\"ur den  Idealit\"atsfaktor
+        des vereinfachten Modells wird  deshalb entsprechend der Anzahl Zellen
+        im Modul skaliert.
+\end{itemize}
+
+Gem\"ass dieser Methodik werden die Startwerte festgelegt auf:
+
+\begin{itemize}
+    \firmlist
+    \item
+        $C_{\mathrm{p, Modul}} = \SI{167}{\nano\farad}$
+    \item
+        $R_{\mathrm{S}} = \SI{12}{\milli\ohm}$
+    \item
+        $R_{\mathrm{Shunt}} = \SI{60}{\kilo\ohm}$
+    \item
+        $I_{\mathrm{S}} = \SI{288}{\milli\ampere}$
+    \item
+        $n = 118$
+\end{itemize}
+
+Mit diesen  Werten werden verschiedene  Szenarien simuliert und  die Resultate
+mit den  Ergebnissen des komplexeren Modells  verglichen. Durch Iteration wird
+$I_{\mathrm{S}}$ schlussendlich  auf \SI{2.88}{\micro\ampere}  festgelegt, was
+kurioserweise kleiner ist als der Wert einer einzelnen Diode.
+
+Abbildungen
+\ref{fig:model:simpel:verif:current:mosfet:freq},
+\ref{fig:model:simpel:verif:voltage:mosfet:freq},
+\ref{fig:model:simpel:verif:current:RL:freq} und
+\ref{fig:model:simpel:verif:current:mosfet:time} stellen die Resultate
+verschiedener Simulationen mit und ohne Last f\"ur das vereinfachte Modell und
+das zellenbasierte  Modell graphisch dar.   Wie zu erkennen ist,  besteht eine
+gute \"Ubereinstimmung.
+
+%Parasit\"are Kapazit\"at: Kapazit\"at einer Zelle / anzahl Zellen \\
+%Serie widerstand: widerstand einzelzelle * anzahl zellen \\
+%shunt widerstand: widerstand einer zelle / anzahl zellen \\
+%IS: IS einzelzelle * anzahl zellen (0.288m) -> anpassen, bis frequenzgang und zeitplot passend \\
+%N: N einzelzelle * anzahl zellen \\
+%Shockley diode model \\
+\todo{Einheiten achsen, auflistung parameter, schaltkreise zu plots, LTspice diagramme}
+
 
 \begin{figure}
     \begin{tikzpicture}
-       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+       \begin{scope}[x={(0mm,0mm)},y={(90mm,0.9\textwidth)}]
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
-                   at={(0,80mm)},
+                   height=45mm,
+                   width=0.9\textwidth,
+                   at={(0,45mm)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Strom (\si{\deci\bel}),
                ]
-               \addplot[-,color=magenta] table {data/module-simple--frequency-response--mag.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-mosfet-no-load--I--magn.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sqeep-over-mosfet-no-load--I--magn.dat};
            \end{axis}
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
+                   height=45mm,
+                   width=0.9\textwidth,
                    at={(0,0)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Phase (\si{\degree}),
                ]
-               \addplot[-,color=red] table {data/module-simple--frequency-response--phase.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-mosfet-no-load--I--phase.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sqeep-over-mosfet-no-load--I--phase.dat};
            \end{axis}
        \end{scope}
    \end{tikzpicture}
-   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des vereinfachten Modells f\"ur ein Modul.}
-   \label{fig:freqresponse:module:simple}
+    \caption{Frequenzgang des Stroms durch den MOSFET bei einer Beschaltung ohne zus\"atzliche Last}
+    \label{fig:model:simpel:verif:current:mosfet:freq}
 \end{figure}
 
 \begin{figure}
     \begin{tikzpicture}
-       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+       \begin{scope}[x={(0mm,0mm)},y={(90mm,0.9\textwidth)}]
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
-                   at={(0,80mm)},
+                   height=45mm,
+                   width=0.9\textwidth,
+                   at={(0,45mm)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Spannung (\si{\deci\bel}),
                ]
-               \addplot[-,color=magenta] table {data/module-72cells--frequency-response--mag.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-mosfet-no-load--U--magn.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sweep-over-mosfet-no-load--U--magn.dat};
            \end{axis}
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
+                   height=45mm,
+                   width=0.9\textwidth,
                    at={(0,0)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Phase (\si{\degree}),
                ]
-               \addplot[-,color=magenta] table {data/module-72cells--frequency-response--phase.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-mosfet-no-load--U--phase.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sweep-over-mosfet-no-load--U--phase.dat};
            \end{axis}
        \end{scope}
    \end{tikzpicture}
-   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des Modells f\"ur ein Modul mit 72 Zellen}
-   \label{fig:freqresponse:module:72cell}
+    \caption{Frequenzgang der Spannung \"uber dem MOSFET bei einer Beschaltung ohne zus\"atzliche Last}
+    \label{fig:model:simpel:verif:voltage:mosfet:freq}
 \end{figure}
 
 \begin{figure}
     \begin{tikzpicture}
-       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+       \begin{scope}[x={(0mm,0mm)},y={(90mm,0.9\textwidth)}]
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
-                   at={(0,80mm)},
+                   height=45mm,
+                   width=0.9\textwidth,
+                   at={(0,45mm)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Spannung (\si{\deci\bel}),
                ]
-               \addplot[-,color=magenta] table {data/module-simple--frequency-response--mag.dat};
-               \addplot[-,color=blue] table {data/module-72cells--frequency-response--mag.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-Rload--100ohm-100uF--I--magn.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sweep-over-Rload--100ohm-100uF--I--magn.dat};
            \end{axis}
            \begin{axis}[%
                    xmode=log,
-                   height=65mm,
-                   width=\textwidth,
+                   height=45mm,
+                   width=0.9\textwidth,
                    at={(0,0)},
                    grid=both,
+                   xlabel=Frequenz (\si{\hertz}),
+                   ylabel=Phase (\si{\degree}),
                ]
-               \addplot[-,color=magenta] table {data/module-simple--frequency-response--phase.dat};
-               \addplot[-,color=blue] table {data/module-72cells--frequency-response--phase.dat};
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--freq-sweep-over-Rload--100ohm-100uF--I--phase.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--freq-sweep-over-Rload--100ohm-100uF--I--phase.dat};
            \end{axis}
        \end{scope}
    \end{tikzpicture}
-   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des vereinfachten Modells f\"ur ein Modul.}
-   \label{fig:freqresponse:module:simple}
+   \caption{Frequenzgang des Stroms durch den Lastwiderstand bei einer Last von \SI{100}{\ohm} parallel zu \SI{100}{\micro\farad}}
+    \label{fig:model:simpel:verif:current:RL:freq}
+   %\label{fig:freqresponse:module:simple}
+\end{figure}
+
+
+\begin{figure}
+    \begin{tikzpicture}
+       \begin{scope}[x={(0mm,0mm)},y={(60mm,0.9\textwidth)}]
+           \begin{axis}[%
+                   height=60mm,
+                   width=0.9\textwidth,
+                   at={(0,0)},
+                   grid=both,
+                   xlabel=Zeit (\si{\second}),
+                   ylabel=Strom (\si{\ampere}),
+               ]
+                \addplot[color=blue] table {data/simple-model-verification/module-72cells-series--reference--time-domain-over-mosfet-10kHz--I.dat};
+                \addplot[color=magenta] table {data/simple-model-verification/module-simple-72x1--time-domain-over-mosfet--10kHz--I.dat};
+           \end{axis}
+       \end{scope}
+   \end{tikzpicture}
+    \caption{Zeitlicher Verlauf des Stroms durch den MOSFET bei einer Beschaltung ohne zus\"atzliche Last}
+    \label{fig:model:simpel:verif:current:mosfet:time}
 \end{figure}
 
 
 % ---------------------------------------------------------------------------- %
+\clearpage
 \section{DC-Leitung}
 \label{app:models:develop:DCLine}
 % ---------------------------------------------------------------------------- %

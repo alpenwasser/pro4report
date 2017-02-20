@@ -1,0 +1,108 @@
+% **************************************************************************** %
+\chapter{Daten von Solarmodulen}
+\label{app:commercial:modules}
+% **************************************************************************** %
+
+Dieser Abschnitt enth\"alt in  Tabelle \ref{tab:moduleData:IU} einige Eckdaten
+von kommerziell  erh\"altlichen Modulen  mit den  zugeh\"origen Quellen. Diese
+Informationen sollen  prim\"ar als Anhaltspunkt und  Vergleich zwischen Praxis
+und unseren Simuationen dienen.
+
+\begin{table}
+    \centering
+    \small
+    \caption{%
+        Daten   f\"ur   Solarmodule.  \textbf{pk}:   polykristallines   Panel,
+        \textbf{mk}:     monokristallines     Panel.     \emph{Anmerkung}: Die
+        Konfiguration  der Module  (wieviele  Zellen in  Serie  und wie  viele
+        Str\"ange  parallel)  ist  mit   Ausnahme  des  Solarex  MSX-60  nicht
+        angegeben. Es  ist  aber  bekannt,  in  welcher  Gr\"ossenordnung  die
+        Spannung  pro  Zelle  ungef\"ahr  liegen sollte,  womit  man  aus  den
+        angegebenen Leerlaufspannungen  und der Gesamtzahl der  Zellen auf die
+        Konfiguration eines Modules schliessen kann.%
+    }
+    \label{tab:moduleData:IU}
+    \begin{tabular}{lp{20mm}lllll}
+        \toprule
+          \rotatebox{70}{\pbox{25mm}{Quelle}}
+        & \rotatebox{70}{\pbox{25mm}{Modell}}
+        & \rotatebox{70}{\pbox{25mm}{Kurzschluss-\\strom $I_{\mathrm{SC}}$}}
+        & \rotatebox{70}{\pbox{25mm}{Leerlauf-\\spannung $V_{\mathrm{OC}}$}}
+        & \rotatebox{70}{\pbox{25mm}{Anzahl Zellen \\(total)}}
+        & \rotatebox{70}{\pbox{25mm}{Anzahl Zellen \\(Strang)}}
+        & \rotatebox{70}{\pbox{25mm}{Leerlaufspan-\\nung pro Zelle}} \\
+        \midrule
+
+          \cite{ref:solar:bonkoungou}
+        & Solarex MSX-60
+        & \SI{3.8}{\ampere}
+        & \SI{21.1}{\volt}
+        & \num{36}
+        & \num{36}
+        & \SI{586}{\milli\volt}
+        \\
+
+          \cite{ref:solar:px85}
+        & Sunset PX85 (\textbf{pk})
+        & \SI{5.5}{\ampere}
+        & \SI{21.5}{\volt}
+        & \num{76}
+        & \num{38}
+        & \SI{566}{\milli\volt}
+        \\
+
+          \cite{ref:solar:as150}
+        & Sunset Solargenerator AS150 (\textbf{mk})
+        & \SI{8.7}{\ampere}
+        & \SI{22.3}{\volt}
+        & \num{36}
+        & \num{36}
+        & \SI{620}{\milli\volt}
+        \\
+
+          \cite{ref:solar:sunmodulePro}
+        & Sunmodule Pro-Series XL SW320 (\textbf{mk})
+        & \SI{9.41}{\ampere}
+        & \SI{45.9}{\volt}
+        & \num{72}
+        & \num{72}
+        & \SI{638}{\milli\volt}
+        \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+%\begin{table}[h!tb]
+%    \centering
+%    \caption{Abmessungen der Solarmodule aus Tabelle \ref{tab:moduleData:IU}}
+%    \label{tab:moduleData:Dimensions}
+%    \begin{tabular}{lp{20mm}ll}
+%        \toprule
+%          \rotatebox{70}{\pbox{25mm}{Quelle}}
+%        & \rotatebox{70}{\pbox{25mm}{Modell}}
+%        & \rotatebox{70}{\pbox{25mm}{Abmessungen Modul ($\si{\milli\meter} \si{\milli\meter}$)}}
+%        & \rotatebox{70}{\pbox{25mm}{Abmessungen Zelle ($\si{\milli\meter} \si{\milli\meter}$)}} \\
+%        \midrule
+%
+%          \cite{ref:solar:px85}
+%        & Sunset PX85 (\textbf{pk})
+%        & $1477 \times 660$
+%        & $\approx 165 \times 75$
+%        \\
+%
+%          \cite{ref:solar:as150}
+%        & Sunset Solargenerator AS150 (\textbf{mk})
+%        & $1480 \times 660$
+%        & $\approx 155 \times 164$
+%        \\
+%
+%          \cite{ref:solar:sunmodulePro}
+%        & Sunmodule Pro-Series XL SW320 (\textbf{mk})
+%        & $1985 \times 990$
+%        & $156 \times 156$
+%        \\
+%        \bottomrule
+%    \end{tabular}
+%\end{table}

@@ -1,0 +1,31 @@
+\begin{tikzpicture}
+    \begin{scope}[x={(0mm,0.95\textwidth)},y={(0mm,50mm)}]
+        \begin{axis}[%
+            title=Klemmenschaltung Spannung am Empf\"anger{,} ohne Last,
+            height=50mm,
+            width=0.95\textwidth,
+            at={(0,0)},
+            grid=both,
+            xlabel=Zeit (\si{\micro\second}),
+            ylabel=Spannung (\si{\volt}),
+            change x base=true,
+            x SI prefix=micro,
+            legend cell align = left,
+            xmin = 0,
+            xmax = 3e-4,
+            %yticklabel={\num[round-mode=places, round-precision=4]{\tick}},
+        ]
+        %\addplot[-,blue] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-steps.dat};
+        \addplot[-,blue] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-1n.dat};
+        %\addplot[-,magenta] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-10n.dat};
+        \addplot[-,teal] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-100n.dat};
+        %\addplot[-,purple] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-1u.dat};
+        \addplot[-,solarized-magenta] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-Cload-10u.dat};
+        \legend{%
+            $\mathrm{C_{load}} = \SI{1}{\nano\farad}$,
+            $\mathrm{C_{load}} = \SI{100}{\nano\farad}$,
+            $\mathrm{C_{load}} = \SI{1000}{\nano\farad}$%
+        };
+        \end{axis}
+   \end{scope}
+\end{tikzpicture}

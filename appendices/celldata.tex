@@ -1,0 +1,221 @@
+% **************************************************************************** %
+\chapter{Zusatzinformationen zur Modellentwicklung}
+\label{app:models:calcs}
+% **************************************************************************** %
+
+Dieses Kapitel beinhaltet Berechnungen, welche zur Modellierung benutzt werden
+und aus Gr\"unden der \"Ubersichtlichkeit nicht im Hauptteil zu finden sind.
+
+
+% ---------------------------------------------------------------------------- %
+\section{Referenzwerte f\"ur PV-Zelle}
+\label{app:models:develop:cell}
+% ---------------------------------------------------------------------------- %
+
+Zur  Herleitung  der  Zellenparameter  werden vier  Quellen  herangezogen,  um
+ein  einigermassen  gut  abgest\"utztes Ergebnis  zu  erhalten. Die  gesuchten
+Parameter sollen  f\"ur am Markt  erh\"altliche Module g\"ultig  sein, weshalb
+Datenbl\"atter von Solar\emph{modulen} und nicht Zellen verwendet werden.
+
+Zuerst  werden  Zellenstrom  und Zellenspannung  bestimmt,  anschliessend  die
+Fl\"ache einer Zelle,  um damit auf die im Modell  verwendete Kapazit\"at, den
+Shunt-Widerstand und den Seriewiderstand schliessen zu k\"onnen.
+
+
+\begin{table}
+    \centering
+    \small
+    \caption{%
+        Daten   f\"ur   Solarmodule.  \textbf{pk}:   polykristallines   Panel,
+        \textbf{mk}:     monokristallines     Panel.     \emph{Anmerkung}: Die
+        Konfiguration  der Module  (wieviele  Zellen in  Serie  und wie  viele
+        Str\"ange  parallel)  ist  mit   Ausnahme  des  Solarex  MSX-60  nicht
+        angegeben. Es  ist  aber  bekannt,  in  welcher  Gr\"ossenordnung  die
+        Spannung  pro  Zelle  ungef\"ahr  liegen sollte,  womit  man  aus  den
+        angegebenen  Leerlaufspannungen  und  der Gesamtzahl  Zellen  auf  die
+        Konfiguration eines Modules schliessen kann.%
+    }
+    \label{tab:moduleData:IU}
+    \begin{tabular}{lp{20mm}lllll}
+        \toprule
+          \rotatebox{70}{\pbox{25mm}{Quelle}}
+        & \rotatebox{70}{\pbox{25mm}{Modell}}
+        & \rotatebox{70}{\pbox{25mm}{Kurzschluss-\\strom $I_{\mathrm{SC}}$}}
+        & \rotatebox{70}{\pbox{25mm}{Leerlauf-\\spannung $V_{\mathrm{OC}}$}}
+        & \rotatebox{70}{\pbox{25mm}{Anzahl Zellen \\(total)}}
+        & \rotatebox{70}{\pbox{25mm}{Anzahl Zellen \\(Strang)}}
+        & \rotatebox{70}{\pbox{25mm}{Leerlaufspan-\\nung pro Zelle}} \\
+        \midrule
+
+          \cite{ref:solar:bonkoungou}
+        & Solarex MSX-60
+        & \SI{3.8}{\ampere}
+        & \SI{21.1}{\volt}
+        & \num{36}
+        & \num{36}
+        & \SI{586}{\milli\volt}
+        \\
+
+          \cite{ref:solar:px85}
+        & Sunset PX85 (\textbf{pk})
+        & \SI{5.5}{\ampere}
+        & \SI{21.5}{\volt}
+        & \num{76}
+        & \num{38}
+        & \SI{566}{\milli\volt}
+        \\
+
+          \cite{ref:solar:as150}
+        & Sunset Solargenerator AS150 (\textbf{mk})
+        & \SI{8.7}{\ampere}
+        & \SI{22.3}{\volt}
+        & \num{36}
+        & \num{36}
+        & \SI{620}{\milli\volt}
+        \\
+
+          \cite{ref:solar:sunmodulePro}
+        & Sunmodule Pro-Series XL SW320 (\textbf{mk})
+        & \SI{9.41}{\ampere}
+        & \SI{45.9}{\volt}
+        & \num{72}
+        & \num{72}
+        & \SI{638}{\milli\volt}
+        \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\myfancybreak
+
+Tabelle  \ref{tab:moduleData:IU} enth\"alt  die Daten  zu Kurzschlussstr\"omen
+und Leerlaufspannungen von vier Modulen. Die Spannung $U_{\mathrm{OC, Zelle}}$
+pro Zelle (letzte Spalte) errechnet sich gem\"ass:
+
+\begin{equation}
+    \label{eq:voltagePerCell}
+    U_{\mathrm{OC, Zelle}} = \frac{U_{\mathrm{OC, Strang}}}{\text{Anzahl Zellen pro Strang}}
+\end{equation}
+
+Wir verwenden f\"ur  die Simulation einer Zelle den  gerundeten Mittelwert der
+Zellenspannungen aus der letzten Spalte von Tabelle \ref{tab:moduleData:IU}:
+
+\begin{equation}
+    \label{eq:cell:UOC}
+    \underline{\underline{U_{\mathrm{OC, Zelle, Simu}} = \SI{600}{\milli\volt}}}
+\end{equation}
+
+Polykristalline  Zellen  liefern  bedeutend  kleinere  Kurzschlusstr\"ome  als
+monokristalline  Zellen.  Jedoch  werden bei  monokristallinen Zellen  weniger
+Str\"ange parallel  geschaltet, womit  der Gesamtstrom  des Moduls  immer noch
+unter \SI{10}{\ampere}  bleibt. Unabh\"angig vom  genauen Aufbau  eines Moduls
+gehen wir  daher davon aus,  dass es  nicht mehr als  \SI{10}{\ampere} liefern
+wird.
+
+\myfancybreak
+
+Das    PX-85-Modul   aus    \cite{ref:solar:px85}    verwendet   76    Zellen,
+angeordnet  in   einer  $4  \times  19$   -  Konfiguration. Seine  Abmessungen
+betragen   $\SI{1477}{\milli\meter}    \times   \SI{660}{\milli\meter}$,   was
+sich   herunterrechnen  l\"asst   auf  eine   ungef\"ahre  Modulgr\"osse   von
+$\SI{165}{\milli\meter}   \times   \SI{75}{\milli\meter}$. Dabei  werden   die
+Abmessungen   des   Rahmens   und   die  Abst\"ande   zwischen   den   Modulen
+vernachl\"assigt.
+
+Die Fl\"ache  des AS-150-Moduls wird analog  aus Quelle~\cite{ref:solar:as150}
+zu  $\SI{155}{\milli\meter}  \times   \SI{164}{\milli\meter}$  bestimmt.   Das
+XL-320-Modul   aus   \cite{ref:solar:sunmodulePro}    hat   die   Zellgr\"osse
+direkt    angegeben,    sie     betr\"agt    $\SI{156}{\milli\meter}    \times
+\SI{156}{\milli\meter}$. Es ist naheliegend dass aufgrund von Standardisierung
+das AS-150-Modul die gleiche Zelldimension hat wie das XL-320-Modul, n\"amlich
+den verbreiteten 6-Zoll-Formfaktor.
+
+Da  eine gr\"ossere  Zelle eine  gr\"ossere Kapazit\"at  und somit  gr\"ossere
+Probleme   im  Falle   der  Kurzschlussvariante   bedeutet,  wird   mit  einer
+Zellgr\"osse   von   $\SI{156}{\milli\meter}  \times   \SI{156}{\milli\meter}$
+gerechnet, womit sich die Fl\"ache der Zelle bestimmt zu:
+
+\begin{equation}
+    \label{eq:cell:surface}
+    \underline{\underline{A_{\mathrm{Zelle}} = \SI{156}{\milli\meter} \times \SI{156}{\milli\meter} = \SI{243.36}{\centi\meter\squared}}}
+\end{equation}
+
+Dies     entspricht     ungef\"ahr     der     600-fachen     Fl\"ache     des
+\SI{0.43}{\centi\meter\squared}-Modules aus  Quelle \cite{ref:solar:scofield}.
+
+
+% ---------------------------------------------------------------------------- %
+\section{Zusatzinformationen zu Dioden}
+\label{app:sec:cell:diodeInfo}
+% ---------------------------------------------------------------------------- %
+
+Dieser  Abschnitt beinhaltet  einige  allgemeine Hintergrundinformationen  zur
+Modellierung  von Dioden,  welche benutzt  werden, um  den Reverse  Saturation
+Current $I_{\mathrm{S}}$  und den  Idealit\"atsfaktor $n$ zu  bestimmen (siehe
+Abschnitt \ref{sec:simu:model:cell}, Seite \pageref{sec:simu:model:cell}).
+
+Die  Grundlage   f\"ur  das  Diodenmodell  ist   die  Shockley-Diodengleichung
+\cite{ref:solar:shockleyEquation}.
+
+\begin{equation}
+    \label{eq:diode}
+    I_{\mathrm{D}} = I_{\mathrm{S}} \cdot \left( \exp\left(\frac{q \cdot V}{n \cdot k \cdot T}\right) - 1 \right)
+\end{equation}
+
+\begin{conditions}
+    I_{\mathrm{D}} & Diodenstrom \\
+    I_{\mathrm{S}} & Reverse saturation current \\
+    q              & Elementarladung eines Elektrons (\SI{1.602e-19}{\coulomb}) \\
+    V              & Diodenspannung \\
+    n              & Idealit\"atsfaktor \\
+    k              & Boltzmannkonstante (\SI{1.38e-23}{\joule\per\kelvin}) \\
+    T              & Diodentemperatur \\
+\end{conditions}
+
+Der   Reverse   Saturation  Current   ist   der   Strom,  der   beim   Anlegen
+einer  negativen   Spannung  \"uber  die   Diode  fliesst,  bevor   die  Diode
+durchbricht~\cite{ref:solar:diodeCharacteristics}.    Er  liegt   bei  kleinen
+Dioden \"ublicherweise Bereich von Nano-Amp\`ere bis Femto-Amp\`ere\todo{F\"ur
+k\"aufliche Dioden, nicht  Solarzellen}, bei einer Solarzelle  ist er h\"oher,
+da diese gr\"osser ist.
+
+Wie  man an  Gleichung \ref{eq:diode}  erkennen kann,  steigt der  Diodenstrom
+f\"ur eine gegebene Spannung, wenn der Reverse Saturation Current ansteigt.
+
+Der Idealit\"atsfaktor ist ein Indikator  f\"ur den Spannungsabfall \"uber der
+Diode in  Abh\"angigkeit des durchfliessenden Stromes  und liegt normalerweise
+zwischen 1  (ideale Diode)  und 2. Unter besonderen  Umst\"anden kann  er auch
+h\"oher  sein, z.B.  bei  der Modellierung  von mehreren  zusammengeschalteten
+Dioden   (siehe    Abschnitt   \ref{app:models:develop:module:simple},   Seite
+\pageref{app:models:develop:module:simple}).
+
+Je  gr\"osser   der  Idealit\"atsfaktor,  umso  h\"oher   der  Spannungsabfall
+\"uber  der  Diode  f\"ur  einen   gegebenen  Strom  (bzw.  umso  kleiner  der
+Strom  bei  einer  fixen   Spannung). Der  Einfluss  von  $_{\mathrm{S}}$  und
+$n$  auf  die  Strom-Spannungs-Kennlinie   einer  Diode  sind  vereinfacht  in
+Abbildung \ref{fig:diodeVI:IS}  dargestellt. Grundlage der Kurve ist  die oben
+aufgef\"uhrte Shockley-Diodengleichung.
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/python/diodeVI.pgf}
+    \caption{%
+        Vereinfachte Strom-Spannungs-Kurve einer Diode. Der Reverse Saturation
+        Current   $I_{\mathrm{S}}$   tritt   im   \textcolor{magenta}{magenta}
+        eingef\"arbten  Bereich auf. Der  in den  Gleichungen benutzte  und in
+        Tabellen angegebene Zahlenwert bezieht sich auf den Bereich der Kurve,
+        in der $I_{\mathrm{S}}$ relativ konstant ist.\protect\\
+        Die    \textcolor{blue}{blaue   Kurve}    dient   als    Referenz. Die
+        \textcolor{red}{rote  Kurve}  zeigt  den Einfluss  eines  ansteigenden
+        Idealit\"atsfaktors  (also  st\"arkeres  Abweichen von  einer  idealen
+        Diode) auf die IV-Kennlinie.\protect\\
+        Die \textcolor{green!50!black}{gr\"une Kurve} zeigt den Einfluss eines
+        ansteigenden  Reverse Saturation  Current: Der Diodenstrom  steigt bei
+        einer gegebenen Diodenspannung.\protect\\
+        Zur  Verbesserung  der  \"Ubersichtlichkeit  wurden  die  abweichenden
+        Kurven nur  im positiven Bereich geplottet,  nat\"urlich \"andert sich
+        auch das Verhalten im Reverse-Betrieb.%
+    }
+    \label{fig:diodeVI:IS}
+\end{figure}

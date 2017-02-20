@@ -1,0 +1,47 @@
+% **************************************************************************** %
+\chapter{Zusatzinformationen Validierung}
+\label{app:validation}
+% **************************************************************************** %
+
+Es  sind an  dieser  Stelle  zus\"atzliche Messergebnisse  und  die f\"ur  das
+Oszilloskop benutzten Einstellungen aufgef\"uhrt.
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Zus\"atzliche Plots f\"ur Validierung}
+% ---------------------------------------------------------------------------- %
+
+Es  sind  hier der  Verlauf  des  Seriewiderstands  unserer Spule  \"uber  die
+Frequenz und der Power Choke Test in Abh\"angigkeit des Flusses aufgef\"uhrt.
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/fsk-meas/frequency_sweep_Rs.pgf}
+    \caption[Messresultate Kopplungsspule: Serienwiderstand Spule]{Serienwiderstandsmessung der gew\"ahlten Spule}
+    \label{fig:meas:coupling:coil:R}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/fsk-meas/power_choke_SUdt.pgf}
+    \caption[Messresultate Kopplungsspule: Kerns\"attigung \"uber Fluss]{Kerns\"attigung der gew\"ahlten Spule in Abh\"angigkeit von $\int U dt$ in Form der Induktivit\"at}
+    \label{fig:meas:coupling:coil:power_choke:2}
+\end{figure}
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Einstellungen Oszilloskop}
+\label{app:scope:settings}
+% ---------------------------------------------------------------------------- %
+
+Im Folgenden sind die Einstellungen  aufgelistet, welche f\"ur das Oszilloskop
+f\"ur die  Messungen in  Abschnitt \ref{sec:val:coupling:coil}  benutzt worden
+sind.
+
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:0}},label={lst:meas:scope:0}]{images/scopeShots/scope_0.txt}
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:1}},label={lst:meas:scope:1}]{images/scopeShots/scope_1.txt}
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:6}},label={lst:meas:scope:6}]{images/scopeShots/scope_6.txt}
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:7}},label={lst:meas:scope:7}]{images/scopeShots/scope_7.txt}
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:8}},label={lst:meas:scope:8}]{images/scopeShots/scope_8.txt}
+\lstinputlisting[style=txt,caption={Oszilloskop-Einstellungen zu Abbildung \ref{fig:meas:scope:9}},label={lst:meas:scope:9}]{images/scopeShots/scope_9.txt}

@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+    \begin{scope}[x={(0mm,0.95\textwidth)},y={(0mm,100mm)}]
+        \begin{axis}[%
+            title=Klemmenschaltung Spannung am Empf\"anger{,} ohne Last,
+            height=45mm,
+            width=0.95\textwidth,
+            at={(0,50mm)},
+            grid=both,
+            xlabel=Zeit (\si{\milli\second}),
+            ylabel=Spannung (\si{\volt}),
+            change x base=true,
+            x SI prefix=milli,
+            xmin = 0,
+            xmax = 3e-4,
+            %yticklabel={\num[round-mode=places, round-precision=4]{\tick}},
+        ]
+        \addplot[-,blue] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-recv--noload.dat};
+            %\addplot[-,magenta] table[x=time, y=powerModule] {data/short-circuit/shortcircuit-transmitter-PPeak.dat};
+            %\legend{MOSFET,PV-Modul};
+        \end{axis}
+        \begin{axis}[%
+            title=Klemmenschaltung Spannung am Empf\"anger{,} Last: \SI{1}{\kilo\ohm}{,} \SI{100}{\micro\farad},
+            height=45mm,
+            width=0.95\textwidth,
+            at={(0,0)},
+            grid=both,
+            xlabel=Zeit (\si{\second}),
+            ylabel=Spannung (\si{\volt}),
+            xmin = 0,
+            xmax = 5,
+            %change x base=true,
+            %x SI prefix=micro,
+            %yticklabel={\num[round-mode=places, round-precision=4]{\tick}},
+        ]
+        \addplot[-,blue] table[x=time, y=V(receiver)] {data/short-circuit/shortcircuit-recv--1kohm100uF--10s.dat};
+            %\addplot[-,magenta] table[x=time, y=powerModule] {data/short-circuit/shortcircuit-transmitter-PPeak.dat};
+            %\legend{MOSFET,PV-Modul};
+        \end{axis}
+   \end{scope}
+\end{tikzpicture}

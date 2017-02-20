@@ -1,0 +1,676 @@
+% **************************************************************************** %
+\chapter{L\"osungsans\"atze und Simulationen}
+\label{chap:simu}
+% **************************************************************************** %
+
+
+Mit   den  im   vorigen  Kapitel   entwickelten  Modellen   werden  nun   drei
+L\"osungsans\"atze auf  ihre Vor-  und Nachteile untersucht,  um anschliessend
+eine Variante auszuw\"ahlen. Zuerst wird die  Einkopplung eines Signals in die
+DC-Leitung mittels induktiver Kopplung untersucht, gefolgt von der kapazitiven
+Einkopplung.   Zuletzt  wird  die  Machbarkeit  der  OOK  mittels  Kurzschluss
+beurteilt. Eine zusammenfassende Gegen\"uberstellung der Simulationsergebnisse
+befindet sich auf Seite \pageref{subsec:simu:conclusion}.
+
+Zur  Simulation wird  \code{LTspice  IV}  \cite{ref:ltspice} von  \emph{Linear
+Technologies} verwendet. Es  ist zu jeder  \code{LTspice}-Schaltung angegeben,
+wo die  zugeh\"orige Datei  auf dem Datentr\"ager  gespeichert ist,  falls der
+geneigte Leser selbst simulieren m\"ochte.
+
+
+% ---------------------------------------------------------------------------- %
+\section{Induktive Einkopplung}
+\label{sec:simu:coupling:inductive}
+% ---------------------------------------------------------------------------- %
+
+Bei der induktiven Einkopplung wird eine  Spule um die DC-Leitung gelegt.  Auf
+diese  Spule  wird  vom  Sensor  das  zu  \"ubertragende  Signal  gegeben  und
+die  Spule induziert  in  der DC-Leitung  entsprechende Spannungs-Rippel,  die
+vom  \Master~ausgewertet werden  k\"onnen. Der  entsprechende Schaltkreis  ist
+schematisch in Abbildung \ref{fig:circuit:coupling:inductive} dargestellt.
+
+\code{LTspice} modelliert diese  Situation als gekoppelte Spulen  mit je einer
+Induktivit\"at (L1  und L2 in  Abbildung \ref{fig:circuit:coupling:inductive})
+und einem Kopplungsfaktor K. Es gilt, diese drei Parameter zu bestimmen.
+
+Wir  werden   f\"ur  unsere   Simulationen  von  einer   Toroidspule  gem\"ass
+Abbildung  \ref{fig:toroid:geometry}  mit   20  Prim\"arwicklungen  und  einer
+Sekund\"arwindung (der DC-Leitung) ausgehen.  Die relative Permeabilit\"at von
+ferromagnetischen Materialien  kann enorm  stark variieren; Werte  von einigen
+Dutzend bis zu  mehreren Tausend k\"onnen auftreten. Wir  werden f\"ur unseren
+Kern eine Permeabilit\"atszahl $\mu_{\mathrm{r}} = 400$ annehmen.
+
+\clearpage
+\begin{figure}[h!tb]
+    \centering
+    \input{images/circuits/coupling-inductive.tex}
+    \caption[Prinzip der induktiven Einkopplung]{Induktive Einkopplung}
+    \label{fig:circuit:coupling:inductive}
+\end{figure}
+
+
+Die Selbstinduktivit\"at unserer Toroidspule errechnet sich somit zu:
+
+\begin{equation}
+    \label{eq:selfInductance:toroid:primary}
+    L_{\mathrm{1}} = \frac{\mu_{0} \mu_{\mathrm{r}} r^2 N_1^2}{2 R} \approx \underline{\underline{\SI{200}{\micro\henry}}}
+\end{equation}
+
+%\begin{figure}[h!tb]
+\marginpar{%
+    \input{images/inductive/toroid.tex}
+    \figcaption[Geometrie Kopplungsspule]{\protect\raggedright Geometrie der Spule}
+    \label{fig:toroid:geometry}%
+}
+%\end{figure}
+
+\begin{conditions}
+    \mu_0 = 4 \cdot \pi \cdot 10^{-7} & magnetische Permeabilit\"at des Vakuums               \\
+    \mu_{\mathrm{r}} = 400 & angenommene relative magnetische Permeabilit\"at des Kerns       \\
+    r = \SI{4}{\milli\meter} & Radius des Kernquerschnitts (Abb. \ref{fig:toroid:geometry})  \\
+    R = \SI{8}{\milli\meter} & mittlerer Radius des Toroids (Abb. \ref{fig:toroid:geometry}) \\
+    N_1 = 20 & Anzahl Windungen \\
+\end{conditions}
+
+Die Induktivit\"at der sekund\"aren Seite lautet:
+
+\begin{equation}
+    \label{eq:selfInductance:toroid:secondary}
+    L_{\mathrm{2}} = L_{1} \cdot \frac{N_2^2 }{N_1^2} \approx \underline{\underline{\SI{500}{\nano\henry}}}
+\end{equation}
+
+\begin{conditions}
+    L_{\mathrm{1}} = \SI{200}{\micro\henry}
+    & Selbstinduktivit\"at der Prim\"arseite (Gl. \ref{eq:selfInductance:toroid:primary})\\
+
+    N_1 = 20 & Windungsn Prim\"arseite (Transmitter/Receiver) \\
+    N_2 = 1  & Windungen Sekund\"arseite (DC-Leitung) \\
+\end{conditions}
+
+Der Kopplungsfaktor beschreibt, wie gross  der Anteil des magnetischen Flusses
+ist, welcher beide Spulen durchfliesst. Ein Kopplungsfaktor von null bedeutet,
+dass die  beiden Spulen  v\"ollig entkoppelt sind,  ein Kopplungsfaktor  von 1
+heisst, dass der gesamte Fluss, welcher  die eine Spule durchfliesst, auch die
+andere Spule durchfliesst.  Es wird  hier ein Streuverlust von 5\% angenommen,
+was einen Kopplungsfaktor von 0.95 ergibt.
+
+\clearpage
+Es  wird   zuerst  eine  vereinfachte  Schaltung   untersucht,  bestehend  aus
+einem  Modul,  dem  Sender  und  dem  Empf\"anger,  dargestellt  in  Abbildung
+\ref{fig:ltspice:inductive:singleModule}.
+
+Abbildung   \ref{fig:simu:inductive:singleModule}   zeigt  den   zugeh\"origen
+Spannungsverlauf am Empf\"anger.   Das Signal kommt sauber an,  ist aber nicht
+sehr stark.
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.67\textwidth]{images/ltspice/jac/inductive-singleModule.eps}
+    \caption[Induktive Einkopplung, vereinfachte \code{LTspice}-Schaltung]{%
+        \code{LTspice}-Schaltung f\"ur den vereinfachten Schaltkreis zur
+        Simulation der induktiven Einkopplung\protect\\
+        Dateipfad: \code{ltspice/inductive/singleModule.asc}%
+    }
+    \label{fig:ltspice:inductive:singleModule}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \input{images/simu-inductive/singleModule.tex}
+    \caption[Simulationsergebniss induktive Einkopplung, vereinfachte Schaltung]{%
+        Simulationsergebniss f\"ur die Spannung am Empf\"anger aus Abbildung
+        \ref{fig:ltspice:inductive:singleModule}%
+    }
+    \label{fig:simu:inductive:singleModule}
+\end{figure}
+
+\clearpage
+Zur  Simulation eines  ganzen Modulstrangs  wird die  Schaltung aus  Abbildung
+\ref{fig:ltspice:inductive:complete}  benutzt; der  Modulstrang basiert  dabei
+auf den Herleitungen aus Abschnitt \ref{sec:simu:model:module:string} ab Seite
+\pageref{sec:simu:model:module:string}.
+
+Abbildung  \ref{fig:simu:inductive:stepping}  enth\"alt  Simulationsergebnisse
+f\"ur    verschiedene   Lastimpedanzen    bei    einer   Senderfrequenz    von
+\SI{1}{\mega\hertz}.   Die zugeh\"origen Impedanzkombinationen sind in Tabelle
+\ref{tab:inductive:stepping:params}  aufgelistet. Simulationen  mit  h\"oheren
+resistiven  Anteilen w\"aren  interessant, allerdings  hat \code{LTspice}  bei
+weiterem  Ansteigen von  \code{Rload} (vermutlich  numerische) Schwierigkeiten
+und  die Simulationszeit  steigt auf  Tage bis  Wochen (falls  sie \"uberhaupt
+jemals endet und  die Software nicht in einem Kreis  von nicht konvergierenden
+Bedingungen festh\"angt).
+
+Es  ist zu  erkennen, dass  das Signal  am Empf\"anger  nicht besonders  stark
+von der  Lastimpedanz abh\"angt. Allerdings  ist die  Signalamplitude ziemlich
+klein und  betr\"agt nur  einige Millivolt. Daf\"ur ist  das Signal  in seiner
+Form  nur sehr  schwach  verzerrt,  was wir  als  einen  sehr positiven  Punkt
+bewerten. Vorausgesetzt,  das  Signal  wird  nicht  von  St\"orungen  auf  der
+Leitungen \"uberdeckt, w\"urde  es sich gut f\"ur  Filterung und Verst\"arkung
+eignen. Ob  dies  wirklich  der  Fall  ist, kann  im  Rahmen  dieses  Projekts
+allerdings  nicht  eruiert  werden,  da wir  weder  einen  gen\"ugend  grossen
+Modulstrang  noch die  zur gr\"undlichen  Untersuchung erforderliche  Zeit zur
+Verf\"ugung haben. Soll  das System  aber wirklich in  der Praxis  zum Einsatz
+kommen, muss dieser Punkt sicherlich genauer untersucht werden.
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/ltspice/jac/inductive.eps}
+    \caption[Induktive Einkopplung, \code{LTspice}-Schaltung f\"ur Modulstrang]{%
+        Schaltung  zur   Simulation  eines  Modulstranges   mit  parasit\"aren
+        Impedanzen in der Zuleitung und komplexer Lastimpedanz.\protect\\
+        Dateipfad: \code{ltspice/inductive/string.asc}%
+    }
+    \label{fig:ltspice:inductive:complete}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \input{images/simu-inductive/stepping.tex}
+    \caption[Simulationsergebniss, induktive Einkopplung, Modulstrang]{%
+        Simulationsergebniss f\"ur  die Spannung am Empf\"anger  aus Abbildung
+        \ref{fig:ltspice:inductive:complete}  mit den  Parametern aus  Tabelle
+        \ref{tab:inductive:stepping:params}%
+    }
+    \label{fig:simu:inductive:stepping}
+\end{figure}
+\vspace*{-1em}
+
+\begin{table}[h!tb]
+    \centering
+    \caption{%
+        Lastimpedanzparameter  f\"ur die  Simulationsergebnisse aus  Abbildung
+        \ref{fig:simu:inductive:stepping}
+    }
+    \small
+    \label{tab:inductive:stepping:params}
+    \begin{tabular}{rr|rr|rr}
+        \toprule
+        \code{Cload}             & \code{Rload} & \code{Cload}             & \code{Rload}  & \code{Cload}             & \code{Rload} \\
+        \midrule
+        \SI{  1}{\nano\farad}    & \SI{1}{\ohm} & \SI{  1}{\nano\farad}    & \SI{10}{\ohm} & \SI{  1}{\nano\farad}    & \SI{50}{\ohm} \\
+        \SI{ 10}{\nano\farad}    & \SI{1}{\ohm} & \SI{ 10}{\nano\farad}    & \SI{10}{\ohm} & \SI{ 10}{\nano\farad}    & \SI{50}{\ohm} \\
+        \SI{100}{\nano\farad}    & \SI{1}{\ohm} & \SI{100}{\nano\farad}    & \SI{10}{\ohm} & \SI{100}{\nano\farad}    & \SI{50}{\ohm} \\
+        \SI{  1}{\micro\farad}   & \SI{1}{\ohm} & \SI{  1}{\micro\farad}   & \SI{10}{\ohm} & \SI{  1}{\micro\farad}   & \SI{50}{\ohm} \\
+        \SI{ 10}{\micro\farad}   & \SI{1}{\ohm} & \SI{ 10}{\micro\farad}   & \SI{10}{\ohm} & \SI{ 10}{\micro\farad}   & \SI{50}{\ohm} \\
+        \SI{100}{\micro\farad}   & \SI{1}{\ohm} & \SI{100}{\micro\farad}   & \SI{10}{\ohm} & \SI{100}{\micro\farad}   & \SI{50}{\ohm} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\clearpage
+Interessant    ist    der    Betrieb    des    Senders    mit    Eigenfrequenz
+(ca. \SI{240}{\kilo\hertz} in diesem  Fall) des Modulstrangs\footnotemark. Der
+zugeh\"orige    Spannungsverlauf    am    Empf\"anger   ist    in    Abbildung
+\ref{fig:simu:inductive:resonance}   abgebildet. Hier    wird   ein   vielfach
+gr\"osserer  Signalpegel  erreicht;  allerdings  ben\"otigt  das  Signal  etwa
+\SI{100}{\micro\second},  bis  es wirklich  seine maximale  Amplitude erreicht
+hat. Da  bei  diesem System  jedoch  keine  sehr hohen  Datenraten  ben\"otigt
+werden, muss dies nicht unbedingt kritisch sein.
+
+\footnotetext{%
+    Die Eigenfrequenz  ist hier nicht  mathematisch bestimmt, sondern  aus den
+    Simulationen abgelesen worden.%
+}
+
+\begin{figure}[h!tb]
+    \input{images/simu-inductive/resonance.tex}
+    \caption[Simulationsergebniss induktive Einkopplung bei Resonanz]{%
+        Simulationsergebniss f\"ur die Spannung am Empf\"anger aus Abbildung
+        \ref{fig:ltspice:inductive:complete}%
+    }
+    \label{fig:simu:inductive:resonance}
+\end{figure}
+
+
+Abschliessend kann man  zur induktiven Kopplung sagen, dass  sie bei kleineren
+Aufbauten  gut  funktionieren  sollte,   dass  aber  bei  gr\"osseren  Anlagen
+m\"oglicherweise  zus\"atzliche  Massnahmen  n\"otig sein  k\"onnten,  um  das
+Signal klar empfangen und auswerten  zu k\"onnen. Dies k\"onnte z.B. bedeuten,
+dass  unser System  die Eigenfrequenz  des Modulstrangs  selbst ausmisst   und
+sich entsprechend  selbst konfiguriert,  um stets  auf der  optimalen Frequenz
+\"ubermitteln zu k\"onnen.
+
+Das in den \code{LTspice}-Schaltungen verwendete Symbol f\"ur ein PV-Modul ist
+im Anhang auf Seite \pageref{fig:ltspice:module:symbol} erkl\"art.
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Kapazitive Einkopplung}
+\label{sec:simu:coupling:capacitive}
+% ---------------------------------------------------------------------------- %
+
+Bei der  kapazitiven Einkopplung  wird eine  Signalquelle via  Kondensator mit
+der  DC-Leitung  verbunden. Bei  jedem  Modul und  am  Ende  des  Modulstrangs
+ist   dabei  eine   Einkopplung   vorgesehen. Das   Prinzip  ist   schematisch
+in   Abbildung   \ref{fig:circ:coupling:capacitive}   dargestellt. F\"ur   die
+nachfolgenden  Versuche  wird  eine Tr\"agerfrequenz  von  \SI{1}{\mega\hertz}
+angenommen, sofern nicht anders angegeben.
+
+Sowohl \Master ~wie auch \Sensor~ k\"onnen dabei Signale senden und empfangen;
+das Verfahren ist bidirektional.
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/circuits/coupling-capacitive.tex}
+    \caption[Ersatzschaltbild kapazitive Einkopplung]{%
+        Vereinfachte Darstellung  der kapazitiven  Einkopplung mit  Sender auf
+        der linken  Seite und  Empf\"anger auf der  rechten Seite. Prinzipiell
+        ist das Verfahren jedoch bidirektional.%
+    }
+    \label{fig:circ:coupling:capacitive}
+\end{figure}
+
+Zur   Simulation   in  \code{LTspice}   wird   die   Schaltung  in   Abbildung
+\ref{fig:ltspice:capacitive:string} benutzt. Sie basiert  auf dem Modell eines
+Modulstrangs von Abbildung  \ref{fig:pvstring} (Seite \pageref{fig:pvstring}),
+erg\"anzt  um  die  Ein-  und  Auskopplungsschaltung. Zus\"atzlich  wurde  eine
+komplexe Lastimpedanz eingebaut.
+
+Es   werden   der   Signalpegel   am  Empf\"anger   bei   zwei   verschiedenen
+Senderpositionen  untersucht: Eine zu  Beginn des  Strangs, eine  am Ende  des
+Strangs. Ist der  Sender am Anfang  des Strangs positioniert, muss  das Signal
+durch alle restlichen Module, um an den Empf\"anger zu gelangen; es sind dabei
+Verzerrungen und Abschw\"achungen des Signals zu beobachten.
+
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/ltspice/jac/capacitive.eps}
+    \caption
+    [\code{LTspice}-Schaltung kapazitive Einkopplung, Modulstrang]
+    {%
+        Simulationsschaltung     eines     Modulstrangs    mit     kapazitiver
+        Einkopplung    eines    Signals.
+        Die  Sender  werden  durch  Sinus-Spannungsquellen  simuliert. Es  ist
+        jeweils  nur ein  Sender  aktiv  in der  Simulation,  der andere  wird
+        abgeh\"angt.\protect\\
+        Dateipfad: \code{ltspice/capacitive/string.asc}%
+    }
+    \label{fig:ltspice:capacitive:string}
+\end{figure}
+
+Die    in    \code{LTspice}    benutzte    Schaltung    ist    in    Abbildung
+\ref{fig:ltspice:capacitive:string}      gezeigt.       Die      zugeh\"origen
+Simulationsresultate   sind    in   Abbildung   \ref{fig:simu:capacitive:tran}
+zu sehen.%
+
+\begin{figure}[h!tb]
+    \input{images/simu-capacitive/tran.tex}
+    \caption[Simulationsergebnisse kapazitive Einkopplung, Modulstrang]{%
+        Transientensimulation  der  kapazitiven   Einkopplung  am  Anfang  des
+        Modulstrangs und  am Ende des  Modulstrangs. Ist der Sender  am Anfang
+        des Strangs, wird das Signal merklich abgeschw\"acht und verzerrt.%
+    }
+    \label{fig:simu:capacitive:tran}
+\end{figure}
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Signalcodierung mittels Kurzschluss}
+\label{sec:simu:short}
+% ---------------------------------------------------------------------------- %
+
+Bei   dieser    L\"osungsvariante   wird    jeweils   ein    Modul   gesteuert
+kurzgeschlossen. Dies  verursacht   (theoretisch)  kurze  Spannungseinbr\"uche
+auf   der    DC-Leitung,   welche    vom   Empf\"anger    ausgewertet   werden
+k\"onnen,   wie   in   Abbildung   \ref{fig:modulation:concepts}   auf   Seite
+\pageref{fig:modulation:concepts} vereinfacht dargestellt.
+
+Da die Spannungseinbr\"uche  auf der Leitung bei diesem  Verfahren sehr abrupt
+sind,  k\"onnen  die im  System  vorhandenen  Induktivit\"aten gem\"ass  $v  =
+L  \cdot  \frac{\mathrm{d}i}{\mathrm{d}t}$  (Spannung  in  Abh\"angigkeit  der
+Strom\"anderung \"uber  einer Induktivit\"at) und der  Lenz'schen Regel diesen
+abrupten \"Anderungen  Widerstand leisten. Wenn  diese Gegenspannung  zu gross
+ist, kann es sein, dass das  Signal kompensiert wird und nicht mehr auswertbar
+ist.
+
+Es  werden  in   diesem  Abschnitt  zuerst  Sender   und  Empf\"anger  separat
+untersucht; anschliessend wird das Gesamtsystem evaluiert.
+
+
+% ---------------------------------------------------------------------------- %
+\subsection{Sender}
+\label{subsec:simu:ask:sensor}
+% ---------------------------------------------------------------------------- %
+
+Das  gesteuerte Kurzschliessen  des Moduls  wird mit  einem MOSFET  umgesetzt,
+welcher zwischen  Eingang und  Ausgang des Moduls  durchschalten kann  und vom
+Microcontroller auf dem Sensor gesteuert wird. \fref{fig:module:mosfet:simple}
+zeigt diesen Aufbau schematisch.
+
+\begin{wrapfigure}{r}{60mm}
+    \vspace*{-1em}
+    \centering
+    \input{images/circuits/moduleMOSFET.tex}
+    \caption[Grundprinzip Kurzschluss mit Transistor]{%
+        Gesteuerter     Kurzschluss     eines    Solarmoduls     mit     einem
+        microcontroller-gesteuerten Transistor.%
+    }
+    \label{fig:module:mosfet:simple}
+    \vspace*{-1.0em}
+\end{wrapfigure}
+
+Die  Ansteuerung des  Transistors  erfolgt mit  \SI{3.3}{\volt},  da dies  die
+maximale Spannung  ist, welche der  auf dem Sensor  platzierte Microcontroller
+ausgeben kann. Es muss  dabei beachtet werden, dass  der gew\"ahlte Transistor
+vollst\"andig durchschaltet und in S\"attigung betrieben wird, damit der Strom
+m\"oglichst ungehindert am kurzgeschlossenen Modul vorbeifliessen kann.
+
+\begin{wrapfigure}{l}{65mm}
+    \vspace*{-1em}
+    \centering
+    \includegraphics[width=65mm]{images/ltspice/jac/shortcircuit-transmitter.eps}
+    \caption[\code{LTspice}-Schaltung Kurzschlussmethode, Sender, vereinfacht]{
+        Simulationsschema  f\"ur  ein  einzelnes Modul  mit  kurzschliessendem
+        Transistor und angeschlossener Last von \SI{1}{\kilo\ohm}.\protect\\
+        Dateipfad: \code{ltspice/short/single.asc}%
+    }
+    \label{fig:ltspice:shortCircuit:transmitter}
+    \vspace*{-2em}
+\end{wrapfigure}
+
+Ein  weiterer  kritischer  Punkt  ist,  dass die  im  Modul  (oder sonstwo  im
+Stromkreis)  vorhandenen   Kapazit\"aten  zu  starken   Stromspitzen  f\"uhren
+k\"onnen, welche den Transistor besch\"adigen k\"onnten.
+
+Zuerst wird ein vereinfachtes Szenario simuliert: Ein einzelnes Modul mit einem
+kurzschliessenden Transistor und einer Ohm'schen Last, dargestellt in Abbildung
+\ref{fig:ltspice:shortCircuit:transmitter}.
+
+
+\begin{figure}[h!tb]
+    \input{images/simu-short/short-transmitter.tex}
+    \caption[Simulationsergebnisse Kurzschlussmethode, Sender]{%
+        Transientensimulation    f\"ur     einen    gesteuerten    Kurzschluss
+        \"uber     ein     Solarmodul     mit     einer     rein     Ohm'schen
+        Last      von      \SI{100}{\ohm}     gem\"ass      der      Schaltung
+        in   Abbildung   \ref{fig:ltspice:shortCircuit:transmitter}. Positives
+        Vorzeichen bedeutet aufgenommene Leistung (also thermische Verluste).%
+    }
+    \label{fig:simu:shortCircuit:transmitter}
+\end{figure}
+
+
+Wie  in Abbildung  \ref{fig:simu:shortCircuit:transmitter} sichtbar,  kommt am
+Knoten \code{MEASURE} ein  recht klares Signal an. Der Strom  durch den MOSFET
+oszilliert bei  durchgeschaltetem Transistor ungef\"ahr  um den im  Mittel vom
+Modul angegebenen Strom. Auffallend sind  die Spannungs- und Leistungsspitzen,
+welche beim Deaktivieren des  Transistors auftreteten. Das PV-Modul gibt f\"ur
+kurze  Zeit beinahe  \SI{600}{\watt} ab  und  der MOSFET  absorbiert mehr  als
+\SI{400}{\watt}, allerdings sind  diese Spitzen sehr kurz  und die thermischen
+Verluste  im  Transistor  sind  im Durchschnitt  bei  einem  Sendevorgang  von
+\SI{1}{\milli\second} lediglich etwa \SI{1}{\watt}.
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\subsection{\Master~(Empf\"anger)}
+\label{subsec:simu:ask:recv}
+% ---------------------------------------------------------------------------- %
+
+Der Empf\"anger  basiert auf  dem Prinzip der  Klemmenschaltung. Es existieren
+verschiedene  Implementationen;   die  hier  gew\"ahlte  ist   schematisch  in
+Abbildung  \ref{fig:circuit:clamper} dargestellt. Der  Zweck dieser  Schaltung
+ist,  den DC-Anteil  aus dem  ankommenden  Signal auszukoppeln  und den  Pegel
+des  verbleibenden AC-Signals  in  definierte Grenzen  zu  zwingen, sodass  es
+anschliessend  in die  Empf\"angerschaltung weitergeleitet  werden kann,  ohne
+diese zu besch\"adigen.
+
+Im vorliegenden Fall  muss die Klemmenschaltung die  Spannungsabf\"alle in der
+Gr\"ossenordnung  von  einigen  Dutzend  Volt  (ein  kurzschliessendes  Modul)
+ausfiltern  und  anschliessend  auf  ein  Signal  zwischen  \SI{0}{\volt}  und
+\SI{3.3}{\volt}  konvertieren, welches  dann vom  Empf\"anger ohne  Gefahr von
+Sch\"aden ausgewertet werden kann.
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/circuits/clamper.tex}
+    \caption[Klemmenschaltung]{Die hier verwendete Klemmenschaltung}
+    \label{fig:circuit:clamper}
+\end{figure}
+
+Das Funktionsprinzip ist dabei wie folgt:
+
+\begin{itemize}
+    \tightlist
+    \item
+        $\mathrm{C_{in}}$ koppelt das AC-Signal aus  der Leitung aus (ist also
+        ein sehr einfacher Hochpassfilter).
+    \item
+        $\mathrm{R_{in}}$ begrenzt den Strom,  welcher in die Klemmenschaltung
+        fliesst, sollte also hochohmig sein.
+    \item
+        $\mathrm{R_{pull-up}}$  und  $\mathrm{R_{pull-down}}$ sorgen  daf\"ur,
+        dass  die   Spannung  auf  dem  mittleren   Schaltungsabschnitt  immer
+        definiert ist.
+    \item
+        $\mathrm{V_{high}}$  und  $\mathrm{V_{low}}$  sind  die  gew\"unschten
+        obere  respektive untere  Pegelgrenze des  Ausgangssignals. In unserem
+        Fall sind dies \SI{3.3}{\volt} und \SI{0}{\volt} bzw. \code{Ground}.
+    \item
+        Die beiden Dioden D1 und  D2 sind Zener-Dioden. Steigt die Spannung am
+        Ausgang auf  einen Wert \"uber $\mathrm{V_{low}  + V_{breakdown,D2}}$,
+        wird die Diode D2 durchbrechen. Somit steigt die Spannung nicht \"uber
+        den  durch  die  untere  Klemmenspannung  und  die  Durchbruchspannung
+        der  Diode  definierten  Wert. Sinkt  die Spannung  am  Ausgang  unter
+        $\mathrm{V_{high} - V_{breakdown,D1}}$, bricht  die obere Diode durch,
+        womit ein Minimalwert f\"ur die Spannung am Ausgang definiert ist.
+\end{itemize}
+
+\clearpage
+Zur   Simulation  wird   in   \code{LTspice}  die   Schaltung  aus   Abbildung
+\ref{fig:ltspice:shortCircuit:receiver}  benutzt. Einige Simulationsergebnisse
+sind in  Abbildung \ref{fig:simu:short:recv} dargestellt. Es wird  sowohl ohne
+Last  wie auch  mit  Ohm'sch-kapazitiver  Last simuliert. Eine  abgesch\"atzte
+Leitungsimpedanz von  \SI{100}{\micro\henry} ist  ebenfalls in  die Simulation
+integriert.
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/jac/shortcircuit-recv.eps}
+    \caption[\code{LTspice}-Schema f\"ur Klemmenschaltung]{
+        Simulationsschema f\"ur die Simulation  der Klemme am Empf\"anger.\protect\\
+        Dateipfad: \code{ltspice/short/receiver.asc}%
+    }
+    \label{fig:ltspice:shortCircuit:receiver}
+\end{figure}
+
+Abbildung \ref{fig:ltspice:shortCircuit:receiver} zeigt die \code{LTspice}-Schaltung,
+welche zur Simulation benutzt wird.
+Das ankommende  Signal  wird  durch   einen  negativen  Spannungspuls  von
+\SI{-45}{\volt}   am   Eingang   simuliert   (Leerlaufspannung   eines
+PV-Moduls),  welche  die  ankommende DC-Spannung  von  \SI{900}{\volt}
+einbrechen   l\"asst. In der Leitung ist eine parasit\"are Induktivit\"at
+von \SI{100}{\micro\henry} eingebaut
+
+Ebenfalls gezeigt  ist eine  Ohm'sch-kapazitive Last von  \SI{1}{\kilo\ohm} ||
+\SI{100}{\micro\farad}. Die  Simulationsergebnisse ohne  Last  sind im  oberen
+Plot in  Abbildung \ref{fig:simu:short:recv} gezeigt;  der untere Plot  in der
+gleichen Abbildung  zeigt das  simulierte Verhalten der  Schaltung mit  der in
+Abbildung \ref{fig:ltspice:shortCircuit:receiver} gezeigten Last.
+
+Auf  der  rechten  Seite  ist   ein  Pull-down  Widerstand  auf  \code{Ground}
+eingebaut,  um einen  definierten  Signalpegel zu  haben. Dies  ist f\"ur  die
+Simulation notwendig, geh\"ort aber nicht per se zur Klemmenschaltung.
+
+\clearpage
+\begin{figure}[h!tb]
+    \centering
+    \input{images/simu-short/short-recv.tex}
+    \caption[Simulationsergebnisse Klemmenschaltung]{%
+        Simulation   Empf\"anger. Die   obere   Kurve  ist   das   Signal   am
+        Empf\"anger  ohne  angeschlossene Last. Der  \"Ubertragungsvorgang  im
+        unteren  Bild beginnt  bei einer  Sekunde. Die Schaltungsfrequenz  ist
+        \SI{10}{\kilo\hertz}%
+    }
+    \label{fig:simu:short:recv}
+\end{figure}
+
+Wie  an  Abbildung  \ref{fig:simu:short:recv}  gesehen werden  kann,  hat  die
+Art  der  angeh\"angten Last  einen  merklichen  Einfluss auf  das  ankommende
+Signal. Ein grosser kapazitiver Anteil in der Last reduziert die Amplitude des
+ankommenden  Signals  bedeutend und  f\"uhrt  einen  sehr lange  (etwa  f\"unf
+Sekunden!) dauernden Entlade- und Ladevorgang der kapazitiven Anteile im Kreis
+ein.
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\subsection{Gesamtsystem}
+\label{subsec:simu:ask:total}
+% ---------------------------------------------------------------------------- %
+
+
+Im  Folgenden   werden  der  oben  untersuchte   Transmitter  und  Empf\"anger
+in  den  bereits  in  Abschnitt  \ref{sec:simu:model:module:string}  ab  Seite
+\pageref{sec:simu:model:module:string}   vorgestellten   Modulstrang  aus   20
+Modulen  mit  einer  \SI{20}{\meter} langen  Anschlussleitung  (pro  Richtung)
+eingebaut und das Verhalten dieses Systems untersucht.
+
+Die zugeh\"orige  Simulationsschaltung f\"ur  \code{LTspice} ist  in Abbildung
+\ref{fig:ltspice:shortcircuit:complete} dargestellt.
+
+\begin{figure}[h!tb]
+    \includegraphics[width=\textwidth]{images/ltspice/jac/shortcircuit.eps}
+    \caption[\code{LTspice}-Schaltung f\"ur Kurzschlussmethode, Modulstrang]
+    {%
+        Gesamte Simulationsschaltung f\"ur die Kurzschlussmethode\protect\\
+        Dateipfad: \code{ltspice/short/string.asc}%
+    }
+    \label{fig:ltspice:shortcircuit:complete}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \input{images/simu-short/complete-Load-steps.tex}
+    \caption[Simulationsergebnisse Kurzschlussmethode]{%
+        Simulationsergebnisse  f\"ur  das  Signal  am  Knoten  \code{RECEIVER}
+        aus  Abbildung  \ref{fig:ltspice:shortcircuit:complete}  f\"ur  Lasten
+        mit   verschiedenen    kapazitiven   Anteilen    \code{Cload}   (obere
+        Plots)  und  resistiven   Anteilen  \code{Rload}  (untere  Plots). Die
+        \"Ubertragungsfrequenz betr\"agt \SI{10}{\kilo\hertz}.%
+    }
+    \label{fig:simu:short:complete}
+\end{figure}
+
+Wie   in   Abbildung   \ref{fig:simu:short:complete}   zu   sehen,   hat   die
+angeschlossene   Last  einen   betr\"achtlichen  Einfluss   auf  das   Signal,
+welches  beim  Empf\"anger  ankommt  (wie  auch  schon  im  vorigen  Abschnitt
+beobachtet).   Bei einem  Ohm'schen Lastwiderstand  von \SI{1}{\kilo\ohm}  und
+einer Lastkapazit\"at  von bereits  \SI{100}{\nano\farad} kommt  anstatt eines
+Rechteckpulses eine Doppelschwingung beim  Empf\"anger an; steigt die Gr\"osse
+der parasit\"aren Komponente der Last auf \SI{1}{\milli\farad}, ist vom Signal
+am Empf\"anger bei der eingestellten Frequenz nicht mehr viel zu sehen.
+
+Auch die  Ohm'sche Komponente der  Last hat  bedeutenden Einfluss; ist  sie zu
+klein, sinkt die Signalamplitude am  Empf\"anger stark (blaue Kurve im unteren
+Plot von Abbildung \ref{fig:simu:short:complete}).
+
+Die Gesamtbeurteilung  dieses Ansatzes  ist gemischt: Prinzipiell  k\"onnte es
+m\"oglich sein, eine  funktionierende Implementation zu entwickeln. Allerdings
+gibt  es  Faktoren,  welche  erhebliche Auswirkungen  auf  die  Erfolgschancen
+aus\"uben haben,  und die wir  nicht beeinflussen k\"onnen, oder  deren genaue
+Untersuchung im Rahmen  dieses Projekts aus Zeit-  und Materialgr\"unden nicht
+m\"oglich ist.
+
+Sollte   diese   L\"osungsvariante   implementiert  werden,   m\"ussten
+detailliertere Untersuchungen  gemacht werden. Nicht nur muss  das Verhalten des
+PV-Moduls (bzw. des Modulstrangs) bekannt  sein, es m\"ussen auch detaillierte
+Informationen \"uber die angeh\"angten  Lasten eingeholt werden.  Insbesondere
+muss das  Verhalten des  Wechselrichters unter  verschiedenen Betriebsbedingen
+(Last,   momentane   Leistung   der  PV-Modulstr\"ange,   allenfalls   weitere
+unbekannte  Parameter)  bekannt   sein. Abh\"angig  von  den  Charakteristiken
+der  gesamten mit  dem  Modulstrang verbundenen  Schaltung  k\"onnte es  sein,
+dass  diese L\"osungsvariante  nicht  implementierbar  ist. Oder es  m\"ussten
+m\"oglicherweise weitere Schaltkreise entwickelt  und eingebaut werden, um mit
+dem Verhalten des Wechselrichters und  den an ihn angeh\"angten Lasten korrekt
+umgehen  zu k\"onnen. Dies  wiederum  w\"are nicht  wirklich  im Sinne  dieser
+L\"osung, da ihre grosse Attraktivit\"at  genau darin liegen w\"urde, dass ihr
+Schaltungs- und Materialaufwand (theoretisch) sehr gering ist.
+
+Grunds\"atzlich finden wir diese  L\"osungsvariante aufgrund des enorm simplen
+Prinzips zwar sehr interessant. Da dies  jedoch (soweit uns bekannt) absolutes
+Neuland ist und wir die Ressourcen  nicht haben, um einen Modulstrang oder das
+an  einen Modulstrang  angeh\"angte System  genau genug  zu untersuchen  (also
+ausmessen statt  lediglich simulieren),  beurteilen wir  unsere Erfolgschancen
+mit dieser Methode als gering.
+
+
+% ---------------------------------------------------------------------------- %
+\clearpage
+\section{Schlussfolgerungen}
+\label{subsec:simu:conclusion}
+% ---------------------------------------------------------------------------- %
+
+Die  in  den  vorigen  Abschnitten gemachten  Beobachtungen  sind  in  Tabelle
+\ref{tab:simu:conclusion} in einer \"Ubersicht zusammengefasst.
+
+Die Kurzschlussvariante  wird aufgrund der starken  Lastabh\"angigkeit und der
+Neuartigkeit des  Konzepts nicht weiterverfolgt. Wie bereits  angemerkt halten
+wird  diesen  Ansatz  zwar  f\"ur sehr  interessant,  beurteilen  aber  unsere
+Erfolgschancen  im  Rahmen eines  Semesterprojekts  als  zu gering,  um  diese
+Variante weiter zu verfolgen.
+
+Bei der  kapazitiven Einkopplung hat  der Ort, an  dem die Einkopplung  in den
+Strang erfolgt, einen grossen Einfluss  nicht nur auf die Signalamplitude beim
+Empf\"anger, sondern auch  auf die Form des Signals. Dies  beurteilen wird als
+nicht  optimal, da  allenfalls  komplexe L\"osungen  n\"otig  w\"aren, um  das
+Signal am Empf\"anger \"uberhaupt noch als solches erkennen zu k\"onnen.
+
+Aufgrund der niedrigen  Verzerrung des Signals bei  der induktiven Einkopplung
+wird diese  Variante implementiert. Die Signalamplitude beim  Betrieb in einem
+Strang mit mehreren Modulen kann zwar  stark abfallen, jedoch ist selbst unter
+diesen  Umst\"anden  das Signal  prinzipiell  noch  sehr sauber  und  k\"onnte
+allenfalls wieder herausgefiltert  und verst\"arkt werden. Alternativ k\"onnte
+in einer weiteren Entwicklungsstufe eine L\"osung implementiert werden, welche
+den Strang, in  dem ein Sensor installiert ist, ausmisst,  und automatisch bei
+der optimalen Frequenz (innerhalb von spezifizierten Grenzen) sendet.
+
+\vspace*{2em}
+
+\begin{table}[h!tb]
+    \centering
+    \small
+    \caption{Gegen\"uberstellung der drei L\"osungsvarianten}
+    \label{tab:simu:conclusion}
+    \begin{tabular}{p{38mm}p{28mm}p{28mm}p{28mm}}
+        \toprule
+        \textsc{Kriterium} &
+        \parbox[t]{27mm}{\textsc{induktive\\Kopplung}} &
+        \parbox[t]{27mm}{\textsc{kapazitive\\Kopplung}} &
+        \textsc{Kurzschluss} \\
+
+        \midrule
+
+        Komplexit\"at der Schaltung &
+        mittel &
+        mittel &
+        simpel \\
+        [7mm]
+
+        \rowcolor{solarized-base2}
+        Neuartigkeit des Konzepts &
+        niedrig &
+        niedrig &
+        hoch \\
+        [7mm]
+
+        Kosten &
+        hoch &
+        mittel &
+        klein  \\
+        [7mm]
+
+        \rowcolor{solarized-base2}
+        St\"arke des Signals am Empf\"anger &
+        bei Resonanz gut, kann sonst stark abfallen &
+        variiert stark mit Position im Strang &
+        variiert stark mit Last \\
+        [7mm]
+
+        Verzerrung des Signals am Empf\"anger &
+        schwache Verzerrung &
+        variiert mit Position im Strang, Signal kann sehr stark verzerrt werden &
+        variiert stark mit Last \\
+        \bottomrule
+    \end{tabular}
+\end{table}

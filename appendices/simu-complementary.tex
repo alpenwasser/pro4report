@@ -3,20 +3,24 @@
 \label{app:simu:complementary}
 % **************************************************************************** %
 
-\todo{F\"uhrungstext, captions, labels}
+
+Dieses   Kapitel  beinhaltet   erg\"anzende  Simulationsergebnisse,   die  aus
+Gr\"unden der \"Ubersichtlichkeit nicht im Hauptteil zu finden sind.
+
 
 % ---------------------------------------------------------------------------- %
 \section{Modul mit zwei parallelen Str\"angen}
 \label{app:sec:simu:complementary:36x2}
 % ---------------------------------------------------------------------------- %
 
-\begin{figure}
+\begin{figure}[h!tb]
+    \centering
     \begin{tikzpicture}
-       \begin{scope}[x={(0mm,0mm)},y={(220mm,\textwidth)}]
+       \begin{scope}[x={(0mm,0mm)},y={(120mm,0.95\textwidth)}]
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
-                   at={(0,150mm)},
+                   at={(0,70mm)},
                    grid=both,
                    xlabel=Zeit (\si{\micro\second}),
                    ylabel=Strom (\si{\ampere}),
@@ -27,9 +31,9 @@
                \addplot[-,color=blue] table {data/module-72cells--I-MOSFET--1000u.dat};
            \end{axis}
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
-                   at={(0,80mm)},
+                   at={(0,35mm)},
                    grid=both,
                    xlabel=Zeit (\si{\micro\second}),
                    ylabel=Spannung (\si{\volt}),
@@ -40,7 +44,7 @@
                \addplot[-,color=magenta] table {data/module-72cells--U-MOSFET--1000u.dat};
            \end{axis}
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
                    at={(0,0)},
                    grid=both,
@@ -50,25 +54,25 @@
                    change x base=true,
                    x SI prefix=micro,
                ]
-               \addplot[-,color=red] table {data/module-72cells--P-MOSFET--1000u.dat};
+               \addplot[-,color=teal] table {data/module-72cells--P-MOSFET--1000u.dat};
            \end{axis}
        \end{scope}
    \end{tikzpicture}
+   \caption{%
+       Transientensimulation des Kurzschlussverfahrens f\"ur ASK mit einem $36 \times 2$-Modul%
+   }
 \end{figure}
+\todo{``Abbilddung sowieso auf Seite diesunddas ist ein vergr\"osserter Ausschnitt eines Peaks aus dieser Simulation''}
 
-% ---------------------------------------------------------------------------- %
-\clearpage
-\section{Modul mit einem Strang}
-\label{app:sec:simu:complementary:72x1}
-% ---------------------------------------------------------------------------- %
 
-\begin{figure}
+\begin{figure}[h!tb]
+    \centering
     \begin{tikzpicture}
-       \begin{scope}[x={(0mm,0mm)},y={(220mm,\textwidth)}]
+       \begin{scope}[x={(0mm,0mm)},y={(120mm,0.95\textwidth)}]
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
-                   at={(0,150mm)},
+                   at={(0,70mm)},
                    grid=both,
                    xlabel=Zeit (\si{\micro\second}),
                    ylabel=Strom (\si{\ampere}),
@@ -79,9 +83,9 @@
                \addplot[-,color=blue] table {data/module-72cells-series--I-MOSFET--1000u.dat};
            \end{axis}
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
-                   at={(0,80mm)},
+                   at={(0,35mm)},
                    grid=both,
                    xlabel=Zeit (\si{\micro\second}),
                    ylabel=Spannung (\si{\volt}),
@@ -92,7 +96,7 @@
                \addplot[-,color=magenta] table {data/module-72cells-series--U-MOSFET--1000u.dat};
            \end{axis}
            \begin{axis}[%
-                   height=65mm,
+                   height=40mm,
                    width=\textwidth,
                    at={(0,0)},
                    grid=both,
@@ -102,8 +106,13 @@
                    change x base=true,
                    x SI prefix=micro,
                ]
-               \addplot[-,color=red] table {data/module-72cells-series--P-MOSFET--1000u.dat};
+               \addplot[-,color=teal] table {data/module-72cells-series--P-MOSFET--1000u.dat};
            \end{axis}
        \end{scope}
    \end{tikzpicture}
+   \caption{%
+       Transientensimulation des Kurzschlussverfahrens f\"ur ASK mit einem $72 \times 1$-Modul%
+   }
 \end{figure}
+
+\todo{``Abbilddung sowieso ist ein vergr\"osserter Ausschnitt eines Peaks aus dieser Simualtin}

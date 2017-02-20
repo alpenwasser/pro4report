@@ -1,0 +1,40 @@
+% Parametrized version, can be put at coordinates x and y
+%
+%\newcommand{\CTSolarCell}[2]{%
+%    % Source to top terminal
+%    (0+#1,0+#2) to[current source,i=$I_{\mathrm{Zelle}}$] (0+#1,4+#2) -- (5+#1,4+#2) to[R,l^=$R_{\mathrm{S}}$] (10+#1,4+#2) node[circ] {}
+%
+%    % Open terminal at bottom
+%    (10+#1,0+#2) node[circ] {} -- (0+#1,0+#2)
+%
+%    % Voltage arrow over open terminals
+%    %(10+#1,3.7+#2) -- (10+#1,0.3+#2) node[currarrow,rotate=-90] {}
+%    %(10+#1,2+#2) node[anchor=west] {$V_{\mathrm{offen}}$}
+%
+%    % Parallel elements
+%    (1.5+#1,4+#2) to[empty diode,*-*,l_=$D$] (1.5+#1,0+#2)
+%    (3+#1,4+#2) to[C,*-*,l_=$C$] (3+#1,0+#2)
+%    (4.5+#1,4+#2) to[R,*-*,l_=$R_{\mathrm{P}}$] (4.5+#1,0+#2)%
+%}
+
+
+\begin{circuitikz}
+    \ctikzset{label/align = rotate}
+    \draw
+    % Source to top terminal
+    (0,0) to[current source,i=$\SI{10}{\ampere}{,}~\SI{5}{\ampere}$] (0,3) -- (6,3) to[R,l^=\SI{333}{\micro\ohm}] (10,3) node[ocirc] {}
+
+    % Open terminal at bottom
+    (10,0) node[ocirc] {} -- (0,0)
+
+    % Voltage arrow over open terminals
+    (10,2.7) -- (10,0.3) node[currarrow,rotate=-90] {}
+    (10,1.5) node[anchor=west] {$V_{\mathrm{offen}}$}
+
+    % Parallel elements
+    %(1.5,3) to[empty diode,*-*,l_=$I_{\mathrm{S}} = \SI{4}{\micro\ampere}, n = 1.65$] (1.5,0)
+    (2,0) to[empty diode,*-*,l_={$\SI{4}{\micro\ampere}{,}~~1.65$}] (2,3)
+    (4,0) to[C,*-*,l_=\SI{12}{\micro\farad}] (4,3)
+    (6,0) to[R,*-*,l_=$\SI{833}{\ohm}$] (6,3)
+    ;
+\end{circuitikz}

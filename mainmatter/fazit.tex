@@ -1,0 +1,44 @@
+% **************************************************************************** %
+\chapter{Fazit}
+\label{chap:fazit}
+% **************************************************************************** %
+\enlargethispage{4em}
+
+\vspace*{-2em}
+Nach  Abschluss  des   Projektes  steht  dem  Auftraggeber   ein  Produkt  zur
+Verf\"ugung, das  als Gesamtsystem die  Spannungen an PV-Modulen  erfassen und
+auswerten  kann. Die einzelnen  Teilsysteme sind  mehrheitlich als  Prototypen
+vorhanden, im Labor getestet und funktionsf\"ahig.
+
+Der  Sensor kann  Spannungen messen  und Werte  ausgeben. Mit einer  Abmessung
+von  knapp  $\SI{5}{\centi\meter}\times\SI{5}{\centi\meter}$  bieten  wir  dem
+Auftraggeber eine  Sensorplatine, die  garantiert in  jedem Anschlussgeh\"ause
+Platz findet. Die  Firmware zusammen  mit den  gew\"ahlten Hardwarekomponenten
+erm\"oglichen eine saubere Messung  der Modulspannung. Die Hauptproblematik im
+Projekt bestand darin, eine optimale L\"osung f\"ur die Kommunikation zwischen
+Sensor und Master-Ger\"at  zu finden. Mit induktiver Einkopplung  und OOSK ist
+eine eine Variante gew\"ahlt worden, die es erm\"oglicht, die gemessenen Daten
+der  PV-Module dem  Masterger\"at  zu  \"ubermitteln. Das Grundprinzip  dieser
+\"Ubertragungsmethode ist validiert.
+
+Mit einem Testaufbau k\"onnen Signale  vom Master-Ger\"at empfangen und an den
+Raspberry  Pi  weitergeleitet  werden. Mithilfe  der  Mastersoftware  ist  der
+Raspberry Pi  im Stande, die  empfangenen Messwerte, auszuwerten,  mit anderen
+Messdaten zu vergleichen und n\"otigenfalls eine Fehlermeldung auf dem Display
+auszugeben. Das  Master-Ger\"at  bietet  einerseits  eine  benutzerfreundliche
+Oberfl\"ache,  andererseits l\"asst  sich  das schlichte  Geh\"ause bequem  in
+einen bestehenden  Generatoranschlusskasten installieren, auch wenn  nur wenig
+Platz  vorhanden  ist. Die  Bedienung  und  Inbetriebnahme  \"uber  das  2.5``
+Touch-Display ist \"ausserst komfortabel und selbsterkl\"arend.  Ein GSM-Modul
+f\"ur  das Versenden  einer Textnachricht  an ein  Mobiltelefon ist  ebenfalls
+vorhanden,  lediglich  dessen  Ansteuerungsfirmware  muss  noch  implementiert
+werden. Anschliessend  ist  das  Master-Ger\"at  im  Stande,  im  Falle  eines
+Modulfehlers,  neben der  Bet\"atigung  der beiden  Relaiskontakte, auch  eine
+Fehlermeldung per  SMS zu  versenden. Die geplante Zusatzfunktion  zur Messung
+der Strangstr\"ome am Master-Ger\"at ist wegen Zeitmangel noch nicht getested,
+jedoch in die Entwicklung integriert.
+
+Als  n\"achster   Schritt  sollte  die  Daten\"ubermittlung   vom  Sensor  zum
+Master-Ger\"at mittels  Powerline getestet werden, wie  auch das Zusammenspiel
+von Tochterboard und  Raspberry Pi. Letztlich sollte das  gesamten Systems als
+Ganzes \"uberpr\"uft werden.

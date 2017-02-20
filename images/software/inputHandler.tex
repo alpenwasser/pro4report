@@ -1,0 +1,256 @@
+\begin{tikzpicture}[%
+        align=center,
+        text=solarized-base02,
+        draw=solarized-base02,
+        remember picture,
+        overlay,
+    ]
+    \small
+    \ttfamily
+
+    \begin{scope}[
+        every node/.style = draw,
+        terminal/.append style={
+            rounded rectangle,
+            fill=solarized-violet,
+            text=solarized-base3,
+            inner sep=2mm,
+        }, % data packages
+        sign/.style={
+            inner sep=2mm,
+            rounded corners=1mm,
+            fill=solarized-magenta,
+            text=solarized-base3,
+        },         % custom signal style
+        circ/.style={
+            inner sep=2mm,
+            rounded corners=1mm,
+            double,
+            fill=solarized-base02,
+            draw=solarized-base02,
+            text=solarized-base2,
+        }, % circuitry
+        proc/.style={
+            inner sep=2mm,
+            rounded corners=1mm,
+            fill=solarized-cyan,
+            text=solarized-base3,
+        },       % process/activity
+        stor/.style={
+            fill=cyan!30
+        },         % storage
+        dbtable/.style={
+            text=solarized-base3,
+            draw=solarized-base3,
+            rounded corners=1mm,
+            inner sep=2mm,
+        } % database tables
+    ]
+        %\node (stringcurrents-request) [
+        %    sign,
+        %    signal,
+        %    signal to=east
+        %] at (10mm,0mm) {stringcurrents\_request};
+
+        \node (stringcurrents-request) [
+            proc,
+        ] at (20mm,-20mm) {stringcurrents\_request};
+
+        %\node (string-support) [
+        %    right=30mm of stringcurrents-request,
+        %    draw=white,
+        %] { };
+
+        \node (stringnumber) [
+            sign,
+            signal,
+            signal to=east,
+            signal from=west,
+            above right=20mm of stringcurrents-request,
+        ] {stringnumber};
+
+        \node (stringcurrentget) [
+            sign,
+            signal,
+            signal to=west,
+            signal from=east,
+            right=20mm of stringcurrents-request,
+        ] {stringcurrent};
+
+        \node (read-stringcurrents-i2c) [
+            proc,
+            right=of stringcurrentget,
+        ] {read\_stringcurrents\_i2c};
+
+        \node (write-string-into-database) [
+            proc,
+            below=of read-stringcurrents-i2c,
+        ] {write\_string\_into\_database};
+
+        \node (stringcurrentput) [
+            sign,
+            signal,
+            signal to=east,
+            signal from=west,
+            left=of write-string-into-database,
+        ] {stringcurrent};
+
+        %\node (string-compare) [
+        %    terminal,
+        %    below=20mm of stringcurrents-request,
+        %] {string\_compare};
+
+        \node (string-compare) [
+            proc,
+            below=20mm of stringcurrents-request,
+        ] {string\_compare};
+
+        \node (modulevoltage-request) [
+            proc,
+            below=20mm of string-compare,
+        ] {modulevoltage\_request};
+
+        \node (stringNo-serialNo) [
+            sign,
+            signal,
+            signal to=east,
+            signal from=west,
+            right=20mm of modulevoltage-request,
+            align=center,
+        ] {stringnumber\\serialnumber};
+
+        \node (serialNo-voltage) [
+            sign,
+            signal,
+            signal to=west,
+            signal from=east,
+            below=of stringNo-serialNo,
+            align=center,
+        ] {serialnumber\\voltage};
+
+        \node (read-modulevoltage-i2c) [
+            proc,
+            right=of stringNo-serialNo,
+        ] {read\_modulevoltage\_i2c};
+
+        \node (serialNo-stringNo-voltage) [
+            sign,
+            signal,
+            signal to=south,
+            signal from=north,
+            below=60mm of modulevoltage-request,
+            align=center,
+        ] {serialnumber\\stringnumber\\voltage};
+
+        \node (support1) [
+            fill=white,
+            draw=white,
+            above=of serialNo-stringNo-voltage,
+        ] { };
+
+        \node (write-panel-into-database) [
+            proc,
+            below=of serialNo-stringNo-voltage,
+        ] {write\_panel\_into\_database};
+
+        \node (serialNo1) [
+            sign,
+            signal,
+            signal to=east,
+            signal from=west,
+            right=of write-panel-into-database,
+        ] {serialnumber};
+
+        \node (write-string1-into-database) [
+            proc,
+            above right=of serialNo1,
+        ] {write\_string1\_into\_database};
+
+        \node (write-string2-into-database) [
+            proc,
+            below=of write-string1-into-database,
+        ] {write\_string2\_into\_database};
+
+        \node (write-string3-into-database) [
+            proc,
+            below=of write-string2-into-database,
+        ] {write\_string3\_into\_database};
+    \end{scope}
+
+    \begin{scope}[on background layer]
+        \node (getStringCurrents) [%
+            draw,
+            double,
+            rounded corners=5mm,
+            fill=solarized-base3,
+            inner sep=1.75em,
+            fit=(read-stringcurrents-i2c) (write-string-into-database) (stringnumber) (stringcurrentget) (stringcurrentput),
+            text height=-0.5em,
+            align=right,
+        ] {\sffamily wird pro String $1\times$ ausgef\"uhrt, also total $3\times$};
+
+        \node (getModuleVoltages) [%
+            draw,
+            double,
+            rounded corners=5mm,
+            fill=solarized-base3,
+            inner sep=1.75em,
+            fit=(read-modulevoltage-i2c) (stringNo-serialNo) (serialNo-voltage),
+            text height=-0.5em,
+            align=right,
+        ] {\sffamily mit Schlaufe f\"ur jedes Modul ausgef\"uhrt};
+
+        \node (checkSN) [%
+            draw,
+            double,
+            rounded corners=5mm,
+            fill=solarized-base3,
+            inner sep=1.75em,
+            fit=(serialNo-stringNo-voltage) (write-panel-into-database) (serialNo1) (write-string1-into-database) (write-string2-into-database) (write-string3-into-database) (support1),
+            text height=-0.5em,
+            align=right,
+        ] {\sffamily SN wird \"uberpr\"uft und in das entsprechende Table\\eingetragen, falls noch kein Eintrag vorhanden ist.};
+
+        \node (mainProcess) [%
+            draw,
+            double,
+            rounded corners=5mm,
+            fill=solarized-base2,
+            inner sep=1.5em,
+            fit=(stringcurrents-request) (string-compare) (modulevoltage-request),
+            text height=-0.5em,
+            align=right,
+            text=solarized-base02,
+        ] {\sffamily Hauptablauf des Files};
+    \end{scope}
+
+
+    \begin{scope}[
+            rounded corners,
+            every path/.append style={draw=solarized-base03,},
+    ]
+        \draw[-latex] (stringcurrents-request) |- (stringnumber);
+        \draw[-latex] (stringnumber) -| (read-stringcurrents-i2c);
+        \draw[-latex] (read-stringcurrents-i2c) -- (stringcurrentget);
+        \draw[-latex] (stringcurrentget) -- (stringcurrents-request);
+        \draw[-latex] (stringcurrents-request) |- (stringcurrentput);
+        \draw[-latex] (stringcurrentput) -- (write-string-into-database);
+
+        \draw[-latex] (stringcurrents-request) -- (string-compare);
+        \draw[-latex] (string-compare) -- (modulevoltage-request);
+
+        \draw[-latex] (modulevoltage-request) -- (stringNo-serialNo);
+        \draw[-latex] (stringNo-serialNo) -- (read-modulevoltage-i2c);
+        \draw[-latex] (read-modulevoltage-i2c) |- (serialNo-voltage);
+        \draw[-latex] (serialNo-voltage) -| (modulevoltage-request);
+
+
+        \draw[-latex] (modulevoltage-request) -- (serialNo-stringNo-voltage);
+        \draw[-latex] (serialNo-stringNo-voltage) -- (write-panel-into-database);
+        \draw[-latex] (write-panel-into-database) -- (serialNo1);
+        \draw[dashed,-latex] (serialNo1) |- (write-string1-into-database);
+        \draw[dashed,-latex] (serialNo1) -- (write-string2-into-database);
+        \draw[dashed,-latex] (serialNo1) |- (write-string3-into-database);
+    \end{scope}
+
+\end{tikzpicture}

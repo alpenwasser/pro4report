@@ -1,0 +1,42 @@
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0.95\textwidth)},y={(0mm,100mm)}]
+       \begin{axis}[%
+               height=50mm,
+               width=0.95\textwidth,
+               at={(0,50mm)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Strom (\si{\ampere}),
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+            \addplot[-,color=blue] table {data/iv-curves/module-string-complete--all-ok.dat};
+            \addplot[-,color=magenta] table {data/iv-curves/module-string-complete--ifail-1A.dat};
+            \addplot[-,color=teal] table {data/iv-curves/module-string-complete--ifail-5A.dat};
+        \end{axis}
+        \begin{axis}[%
+               height=50mm,
+               width=0.95\textwidth,
+               at={(0,0)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Leistung (\si{\watt}),
+               %axis y line*=left,
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+            %\addplot [blue] table [y=power output] {\moduleAllOK} node {};
+            %\addplot [teal] table [y=power output] {\moduleFiveA} node {};
+            %\addplot [magenta] table [y=power output] {\moduleOneA} node {};
+            \addplot[-,color=blue] table {data/iv-curves/module-string-complete--all-ok--power.dat};
+            \addplot[-,color=magenta] table {data/iv-curves/module-string-complete--ifail-1A--power.dat};
+            \addplot[-,color=teal] table {data/iv-curves/module-string-complete--ifail-5A--power.dat};
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}

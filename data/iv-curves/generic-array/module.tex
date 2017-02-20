@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0mm)},y={(90mm,\textwidth)}]
+       \begin{axis}[%
+               height=50mm,
+               width=\textwidth,
+               at={(0,50mm)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Strom (\si{\ampere}),
+               %axis y line*=left,
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+            \addplot[-,color=blue] table {data/iv-curves/module-72cells-series--reference--all-ok.dat};
+            \addplot[-,color=teal] table {data/iv-curves/module-72cells-series--reference--ifail-5A.dat};
+            \addplot[-,color=magenta] table {data/iv-curves/module-72cells-series--reference--ifail-1A.dat};
+        \end{axis}
+        \begin{axis}[%
+               height=50mm,
+               width=\textwidth,
+               at={(0,0)},
+               grid=both,
+               xlabel=Spannung (\si{\volt}),
+               ylabel=Leistung (\si{\watt}),
+               %axis y line*=left,
+               %x unit=u,
+               %change x base=true,
+               %line width = 1pt,
+               %thick,
+               %x SI prefix=micro,
+           ]
+%            \addplot [blue] table [y=power output] {\cellsAllOK} node {};
+%            \addplot [teal] table [y=power output] {\cellsFiveA} node {};
+%            \addplot [magenta] table [y=power output] {\cellsOneA} node {};
+            \addplot[-,color=blue] table {data/iv-curves/module-72cells-series--reference--all-ok--power.dat};
+            \addplot[-,color=teal] table {data/iv-curves/module-72cells-series--reference--ifail-5A--power.dat};
+            \addplot[-,color=magenta] table {data/iv-curves/module-72cells-series--reference--ifail-1A--power.dat};
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}

@@ -1,0 +1,160 @@
+{\begin{a3pages}
+% ---------------------------------------------------------------------------- %
+\section{Firmware \Sensor}
+\label{sec:firmware:sensor}
+% ---------------------------------------------------------------------------- %
+
+\setlength{\parindentbak}{\parindent}
+    \noindent\adjustbox{valign=t}{\begin{minipage}{135mm}
+Als  CPU auf  dem  Sensor agiert  wie im  Abschnitt~\ref{sec:hw:sensorplatine}
+erw\"ahnt   ein  Atmel   Smart  ARM   Cortex  M0+.    Die  Firmware   ist  aus
+Kompatibilit\"atsgr\"unden zur CPU in C geschrieben.
+
+% ---------------------------------------------------------------------------- %
+\subsection{Benutzte Bibliotheken}
+% ---------------------------------------------------------------------------- %
+
+Es wird komplett freie Software verwendet, weswegen zum Bauen der Binaries GNU
+Makefiles benutzt werden.
+
+    \setlength{\parindent}{\parindentbak} % restore paragraph indentation
+Die  Firmware  ist  auf  dem Atmel  Software  Framework  (ASF)  aufgebaut. Das
+ASF  f\"uhrt  einen   Hardware  Abstraction  Layer  (HAL)   ein,  welcher  die
+Hardware-Bl\"ocke der einzelnen Atmel CPUs  in einfache Interfaces in Form von
+C-Funtionen abstrahiert. Um die g\"angigen  ARM-Schnittstellen zu nutzen, wird
+CMSIS im  ASF  verwendet. Das  ASF  darf  f\"ur  Atmel  Chips  ohne  weiteres
+verwendet werden, solange die Copyright Bemerkungen nicht entfernt werden.
+
+% ---------------------------------------------------------------------------- %
+\subsection{Die Firmware}
+% ---------------------------------------------------------------------------- %
+
+Die Firmware besteht im Kern aus einer \code{main()}-Funktion, welche in einer
+Endlosschleife   l\"auft. Abbildung~\ref{fig:sensor:firmware:mainloop}  zeigt,
+wie  diese  Schleife  aufgebaut  ist.  Zudem  zeigt  sie  den  regelm\"assigen
+\code{SysTick}-Interrupt, welcher den ADC ausliest und die LEDs toggelt.
+
+% ---------------------------------------------------------------------------- %
+\subsubsection{UART}
+\label{subs:UART}
+% ---------------------------------------------------------------------------- %
+
+Die Endlosschleife  \"uberpr\"uft zuerst, ob  Daten \"uber die  UART empfangen
+wurden, sprich Anweisungen vom Master oder Antworten von anderen Sensoren. Ist
+das der Fall, so wird darauf reagiert.  Zuerst wird \"uberpr\"uft ob das Paket
+auch f\"ur den Sensor bestimmt ist. Falls das  erste Byte 0 ist, ist das Paket
+f\"ur den Master bestimmt. Falls es 1 ist, so ist das Paket f\"ur einen Sensor
+bestimmt. Um  zu bestimmen,  ob  das  Paket f\"ur  sich  selbst bestimmt  ist,
+pr\"uft  die Firmware,  ob  die  n\"achsten 4  empfangenen  Bytes der  eigenen
+ID  entsprechen. Hier  ist wichtig,  dass  alle  Daten Little  Endian  codiert
+sind.  Falls das Paket tats\"achlich f\"ur  den Sensor bestimmt ist, so wertet
+er  nun den  Befehl  aus  und reagiert  darauf. Im  Normalfall bedeutet  dies,
+dass  die  UART  die  gemittelten  Daten  der  letzten  64  Messwerte  an  den
+Master  adressiert  und verschickt. Hierzu  wird  ein  Datenpaket, wie  es  in
+Abbildung~\ref{fig:sensor:firmware:datenpaket} zu sehen ist, verschickt.
+
+\end{minipage}}
+\hspace*{45mm}
+\adjustbox{valign=t}{\begin{minipage}{165mm}
+    \vspace*{5em}
+    \input{images/software/sensorProcess.tex}
+    \figcaption{\code{main()}-Loop der Sensorfirmware}
+    \label{fig:sensor:firmware:mainloop}
+\end{minipage}}
+
+\end{a3pages}}
+
+\begin{figure*}[ht!]
+  \centering
+  \begin{bytefield}[bitwidth=2em]{8}
+    \bitheader{0,7} \\
+        \colorbitbox{gray!50}{black}{8}{Indikatorbyte}\\
+    \begin{rightwordgroup}{\sffamily Adresse}
+        \colorbitbox{solarized-base2}{solarized-base02}{8}{Adressbyte 0} \\
+        \colorbitbox{solarized-base2}{solarized-base02}{8}{Adressbyte 1} \\
+        \colorbitbox{solarized-base2}{solarized-base02}{8}{Adressbyte 2} \\
+        \colorbitbox{solarized-base2}{solarized-base02}{8}{Adressbyte 3}
+    \end{rightwordgroup} \\
+    \begin{rightwordgroup}{\sffamily Messdaten}
+        \colorbitbox{solarized-magenta}{solarized-base3}{8}{Spannungsbyte 0}\\
+        \colorbitbox{solarized-magenta}{solarized-base3}{8}{Spannungsbyte 1}
+    \end{rightwordgroup} \\
+    \begin{rightwordgroup}{\sffamily CRC}
+        \colorbitbox{solarized-blue}{solarized-base3}{8}{CRCbyte 0}\\
+        \colorbitbox{solarized-blue}{solarized-base3}{8}{CRCbyte 1}\\
+        \colorbitbox{solarized-blue}{solarized-base3}{8}{CRCbyte 2}\\
+        \colorbitbox{solarized-blue}{solarized-base3}{8}{CRCbyte 3}
+    \end{rightwordgroup} \\
+  \end{bytefield}
+  \caption{Aufbau eines Datenpakets}
+  \label{fig:sensor:firmware:datenpaket}
+\end{figure*}
+
+Damit der  Empf\"anger eines  Pakets die  Integrit\"at der  Daten verifizieren
+kann,  wird eine  Pr\"ufsumme (CRC)  der Daten  mitgeschickt.  Um  die CRC  zu
+berechnen,  wird  zuerst  das Datenpaket  zusammengestellt. Davon  wird  dann
+mithilfe des  ASF eine Pr\"ufsumme  erstellt und an das  bestehende Datenpaket
+angeh\"angt. Abschliessend  wird  das   Datenpaket  per  UART  verschickt. Der
+Vorgang  ist auch  in den  Abbildungen \ref{fig:sensor:firmware:mainloop}  und
+\ref{fig:dataFlow} gezeigt.
+
+
+% ---------------------------------------------------------------------------- %
+\subsubsection{Sensor}
+\label{subs:Sensor}
+% ---------------------------------------------------------------------------- %
+
+Als  Spannungssensor  dient  ein  Analog  Digital  Konverter  (ADC).   Daf\"ur
+wird   mithilfe  des ASF   ein  12   Bit  ADC   ausgelesen  und   von  diesen
+Werten  ein  laufender  Mittelwert  (\emph{Moving  Average})  erstellt.   Dies
+wird   regelm\"assig   innerhalb   des  SysTick-Interrupts   erledigt.    Dann
+wird    mithilfe    eines   sogenannten    \emph{Cascaded    Integrator–Comb
+Filters}    \cite{ref:wiki:ccicFilter}    der    aktuelle    Moving    Average
+berechnet. Formel~\ref{eq:hogenauer} zeigt die zugeh\"orige Methodik.
+
+\begin{equation}\label{eq:hogenauer}
+    \begin{split}
+        y[n] &= \sum_{k=0}^{RM-1} x[n-k] \\
+             &= y[n-1] + x[n] - x[n-RM].
+    \end{split}
+\end{equation}
+
+\begin{conditions}
+    R & Interpolationsrate \\
+    M & Anzahl Samples pro Stufe \\
+    N & Anzahl Stufen im Filter \\
+\end{conditions}
+
+% ---------------------------------------------------------------------------- %
+\subsubsection{Statusanzeige}
+\label{subs:Statusanzeige}
+% ---------------------------------------------------------------------------- %
+
+Damit  man  optisch verifizieren  kann,  ob  der Sensor  korrekt  funtioniert,
+wird  im  SysTick-Interrupt  ein  Toggeln  der  LED  ausgef\"uhrt. Blinkt  die
+LED  nicht mehr,  kann  man  daraus schliessen,  dass  der  Sensor nicht  mehr
+korrekt  funktioniert  (siehe Abschnitt  \ref{subsec:hw:sensor:interface}  auf
+Seite \pageref{subsec:hw:sensor:interface}).
+
+% ---------------------------------------------------------------------------- %
+\subsection{Open On Chip Debugger}
+% ---------------------------------------------------------------------------- %
+
+Zum Programmieren der  CPUs haben wir OpenOCD gew\"ahlt. Auch  hier ist wieder
+anzumerken, dass es ein St\"uck freie Software ist. OpenOCD ist extrem leicht
+zu erweitern und unterst\"utzt eine grosse Breite an Programmierschnittstellen
+wie den STLinkv2 oder den Segger J-Link. Es werden Protokolle wie JTag und SWD
+ohne spezielle Konfigurationen unterst\"utzt. Ebenfalls gibt es einen Reichtum
+an Chips, die unterst\"utzt sind.
+
+Da der  SAMD09 erst im  ersten Quartal 2016 auf  den Markt gekommen  ist, sind
+sehr wenige Projekte  vorhanden, welche ihn bereits benutzt  haben.  Daher hat
+OpenOCD  unseren Chip  zu Beginn  nicht unterst\"utzt. Der  bestehende Treiber
+f\"ur Atmel-Chips ist deshalb von uns entsprechend erweitert worden.
+
+Um   die   Kosten   tief   zu   halten,   haben   wir   einen   StLinkv2   als
+Programmierschnittstelle verwendet. Auch  daf\"ur brauchte es einen  Patch des
+Treibers,  da  der  STLinkv2  nur  32  Bit-Schreibbefehle  unterst\"utzt,  der
+SAMD09  aber 16  Bit-Schreibbefehle  erwartet. Wir haben  deshalb einen  Patch
+geschrieben,  welcher  16  Bit-Schreibbefehle  anstatt  32  Bit-Schreibbefehle
+sendet.

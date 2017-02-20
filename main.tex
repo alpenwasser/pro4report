@@ -62,15 +62,33 @@
 \input{preamble/a3pages.tex}
 
 
-
 % -------------------------------------------------------- %
 % If only some files are to  be included in the file for a %
 % compilation run, specify those files here.               %
 % -------------------------------------------------------- %
 %\includeonly{%
-%    chapters/simu,
+%    frontmatter/info,
+%    frontmatter/abstract,
+%    mainmatter/einleitung,
+%    mainmatter/uberblick,
+%    mainmatter/models,
+%    mainmatter/simu,
+%    mainmatter/hardware,
+%    mainmatter/hardware-sensor,
+%    mainmatter/hardware-master,
+%    mainmatter/software,
+%    mainmatter/firmware-sensor,
+%    mainmatter/software-master,
+%    mainmatter/validierung,
+%    mainmatter/userguide,
+%    mainmatter/fazit,
+%    appendices/commercial-modules,
+%    appendices/ltspice,
+%    appendices/schema,
+%    appendices/validierung,
+%    appendices/costs,
+%    appendices/datentrager,
 %}
-
 
 % ******************************************************** %
 \begin{document}
@@ -107,9 +125,12 @@
 % The starred versions do not make an entry for themselves %
 % in the ToC, the unstarred versions do.                   %
 % -------------------------------------------------------- %
+{%
+\enlargethispage{4em}
 \tableofcontents*
-%\listoffigures
-%\listoftables
+}
+%\newpage\listoffigures
+%\newpage\listoftables
 
 
 % -------------------------------------------------------- %
@@ -130,14 +151,19 @@
 % chapters)  without  needing  to adjust  file  names  and %
 % similar shenanigans.                                     %
 % -------------------------------------------------------- %
-\include{chapters/einleitung}
-\include{chapters/uberblick}
-\include{chapters/simu}
-\include{chapters/hardware}
-\include{chapters/firmware}
-\include{chapters/validierung}
-\include{chapters/userguide}
-\include{chapters/fazit}
+\include{mainmatter/einleitung}
+\include{mainmatter/uberblick}
+\include{mainmatter/models}
+\include{mainmatter/simu}
+\include{mainmatter/hardware}
+\include{mainmatter/hardware-sensor}
+\include{mainmatter/hardware-master}
+\include{mainmatter/software}
+\include{mainmatter/firmware-sensor}
+\include{mainmatter/software-master}
+\include{mainmatter/validierung}
+\include{mainmatter/userguide}
+\include{mainmatter/fazit}
 
 
 % -------------------------------------------------------- %
@@ -148,12 +174,12 @@
 % -------------------------------------------------------- %
 \appendixpage
 \appendix
-\include{appendices/models}
-%\include{appendices/celldata}
-%\include{appendices/simu-modul}
-%\include{appendices/simu-modul-simple}
-\include{appendices/simu-complementary}
-\include{appendices/datentrager}
+\include{appendices/commercial-modules}
+\include{appendices/ltspice}
+\include{appendices/schema}
+\include{appendices/validierung}
+%\include{appendices/costs}
+%\include{appendices/datentrager}
 
 
 % -------------------------------------------------------- %
@@ -177,6 +203,7 @@
 % were cited (first occurrence).                           %
 % -------------------------------------------------------- %
 %\bibliographystyle{bibliography/IEEEtranS} % sorted
+\raggedright
 \bibliographystyle{bibliography/IEEEtran} % unsorted
 \bibliography{bibliography/references}
 \end{document}

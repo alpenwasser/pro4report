@@ -18,21 +18,43 @@
 %}
 
 
+% Single Diode
+%\begin{circuitikz}
+%    \draw
+%    % Source to top terminal
+%    (0,0) to[current source,i=$I_{\mathrm{Zelle}}$] (0,3) -- (5,3) to[R,l^=$R_{\mathrm{S}}$] (8,3) node[ocirc] {}
+%
+%    % Open terminal at bottom
+%    (8,0) node[ocirc] {} -- (0,0)
+%
+%    % Voltage arrow over open terminals
+%    (8,2.7) -- (8,0.3) node[currarrow,rotate=-90] {}
+%    (8,1.5) node[anchor=west] {$V_{\mathrm{offen}}$}
+%
+%    % Parallel elements
+%    (1.5,3) to[empty diode,*-*,l_=$D$] (1.5,0)
+%    (3,3) to[C,*-*,l_=$C$] (3,0)
+%    (4.5,3) to[R,*-*,l_=$R_{\mathrm{P}}$] (4.5,0)
+%    ;
+%\end{circuitikz}
+
+% Two Diodes
 \begin{circuitikz}
     \draw
     % Source to top terminal
-    (0,0) to[current source,i=$I_{\mathrm{Zelle}}$] (0,4) -- (5,4) to[R,l^=$R_{\mathrm{S}}$] (10,4) node[ocirc] {}
+    (0,0) to[current source,i=$I_{\mathrm{Ph}}$] (0,3) -- (7.5,3) to[R,l^=$R_{\mathrm{S}}$] (11,3) node[ocirc] {}
 
     % Open terminal at bottom
-    (10,0) node[ocirc] {} -- (0,0)
+    (11,0) node[ocirc] {} -- (0,0)
 
     % Voltage arrow over open terminals
-    (10,3.7) -- (10,0.3) node[currarrow,rotate=-90] {}
-    (10,2) node[anchor=west] {$V_{\mathrm{offen}}$}
+    (11,2.7) -- (11,0.3) node[currarrow,rotate=-90] {}
+    (11,1.5) node[anchor=west] {$V_{\mathrm{offen}}$}
 
     % Parallel elements
-    (1.5,4) to[empty diode,*-*,l_=$D$] (1.5,0)
-    (3,4) to[C,*-*,l_=$C$] (3,0)
-    (4.5,4) to[R,*-*,l_=$R_{\mathrm{P}}$] (4.5,0)
+    (2,3) to[empty diode,*-*,l_=$D_{\mathrm{Diff}}$] (2,0)
+    (4.5,3) to[empty diode,*-*,l_=$D_{\mathrm{Rekomb}}$] (4.5,0)
+    (6,3) to[C,*-*,l_=$C$] (6,0)
+    (7.5,3) to[R,*-*,l_=$R_{\mathrm{Sh}}$] (7.5,0)
     ;
 \end{circuitikz}

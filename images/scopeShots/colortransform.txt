@@ -1,0 +1,6 @@
+Gimp:
+"Colors" -> "Map" -> "Color Exchange"
+
+000000 -> ffffff
+e8e8e8 -> 363636
+242424 -> e8e8e8

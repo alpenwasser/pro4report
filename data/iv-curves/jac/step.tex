@@ -1,0 +1,64 @@
+\documentclass[a4paper]{article}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+%\usepgfplotslibrary{external}%\tikzexternalize
+\pgfplotsset{compat=1.12}
+\usepgfplotslibrary{colormaps}
+\begin{document}
+\pgfplotsset{
+    /pgfplots/colormap={temp2}{rgb255=(36,0,217) rgb255=(25,29,247) rgb255=(41,87,255)
+        rgb255=(61,135,255) rgb255=(87,176,255) rgb255=(117,211,255) rgb255=(153,235,255)
+        rgb255=(189,249,255) rgb255=(235,255,255) rgb255=(255,255,235) rgb255=(255,242,189)
+        rgb255=(255,214,153) rgb255=(255,172,117) rgb255=(255,120,87) rgb255=(255,61,61)
+        rgb255=(247,40,54) rgb255=(217,22,48) rgb255=(166,0,33)}
+}
+\begin{tikzpicture}
+   \begin{scope}[x={(0mm,0mm)},y={(100mm,140mm)}]
+        \begin{axis}[
+            colormap/hot2,
+            %colormap/temp,
+            height=100mm,
+            width=140mm,
+            width=\textwidth,
+            grid=both,
+            zmin=0,
+            thick,
+            xlabel=Spannung,
+            ylabel=Strom,
+            zlabel=Leistung,
+            legend style={at={(0,-0.15)},anchor=north west},
+            legend cell align=left,
+        ]
+            % 10A
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{I(R3)},
+            ] table[y expr=5.889] {ivmax.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{power},
+            ] table[x expr=46.1] {ivmax.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{power},
+            ] table[x expr=0] {ivmax.dat};
+            \addplot3[
+                %draw=blue,
+                draw=blue,
+                scatter src = \thisrow{I(R3)},
+            ] table[z expr=0] {ivmax.dat};
+            \addplot3[
+                surf,
+                shader=interp,
+            ] table {ivstep.dat};
+            \addplot3[
+                draw=blue,
+                very thick,
+            ] table {ivstep.dat};
+        \end{axis}
+    \end{scope}
+\end{tikzpicture}
+\end{document}

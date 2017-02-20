@@ -1,0 +1,27 @@
+\def\POSx{9,8,7,6,5,4,3,2,1,0}
+%\def\POSxRight{2,3,4,5,6,7,8,9,10,11}
+\begin{circuitikz}
+    %(12,0) -- (10,0)
+
+    % Right to Left
+    \foreach \x in \POSx {
+        \draw
+        (\x,1.5) to[empty photodiode] (\x - 1,1.5)
+        ;
+    }
+
+    % Left to Right
+    \foreach \x in \POSx {
+        \draw
+        (\x-1,-1.5) to[empty photodiode] (\x,-1.5)
+        ;
+    }
+
+    % Endpoints
+    \draw (-1,1.5) -- (-1,-1.5);
+
+    % Stuff on the right
+    \draw (9,1.5)  -- (9,0.75)  to[L,l^=L] (12,0.75)  node[ocirc] { };
+    \draw (9,-1.5) -- (9,-0.75) to[R,l_=R] (12,-0.75) node[ocirc] { };
+    \draw (9.5,0.75) node[circ] { } to[C,l^=C] (9.5,-0.75) node[circ] { };
+\end{circuitikz}
