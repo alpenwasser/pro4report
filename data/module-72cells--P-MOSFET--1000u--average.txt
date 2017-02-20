@@ -1,0 +1,4 @@
+Integral Start:    0us
+Integral End:   1000us
+Average:        4.312W
+Integral:       4.312mJ

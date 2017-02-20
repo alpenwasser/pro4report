@@ -1,0 +1,7 @@
+\begin{circuitikz}
+    \draw
+    (-1,0) to[empty photodiode,o-,l_=PV-Modul] (1,0) to[short] (6,0)
+    %(2,-2) to[short,o-] (2,-0.05) to[L=L] (4,-0.05) to[short,-o] (4,-2)
+    (2,-2) -- (2,-0.05) to[L,l^=Kopplung] (4,-0.05) -- (4,-2) to[sinusoidal voltage source,l^=$U_{\mathrm{Signal}}$] (2,-2)
+    ;
+\end{circuitikz}

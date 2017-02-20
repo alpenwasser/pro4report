@@ -1,0 +1,26 @@
+% Pro memoriam:
+%
+%            |  D
+%      | |---+
+%      |
+%      | |<--+  B
+%      |     |
+% G ---+ |---+
+%            |  S
+%(mos.B) node[anchor=west] {B}
+%(mos.G) node[anchor=east] {G}
+%(mos.D) node[anchor=north] {D}
+%(mos.S) node[anchor=south] {S}
+
+\begin{circuitikz}
+    \draw
+    (8,2) node[nigfete] (mos) {MOSFET}
+
+    (0,0) to[empty photodiode,l_=PV-Modul] (0,4) -- (8,4) -- (mos.D)
+    %(0,0) to[dcisource,l_=PV-Modul] (0,4) -- (8,4) -- (mos.D)
+    (mos.S) -- (8,0) -- (0,0)
+
+    (5,1.725) to[american voltage source,l_=Controller] (mos.G)
+    (5,1.725) -- (4.5,1.725) node[sground] {}
+    ;
+\end{circuitikz}

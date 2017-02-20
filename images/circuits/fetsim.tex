@@ -1,0 +1,37 @@
+\begin{circuitikz}
+    \draw
+    (10,2) node[nigfete] (mos) {}
+
+    % Pro memoriam:
+    %
+    %            |  D
+    %      | |---+
+    %      |
+    %      | |<--+  B
+    %      |     |
+    % G ---+ |---+
+    %            |  S
+    %(mos.B) node[anchor=west] {B}
+    %(mos.G) node[anchor=east] {G}
+    %(mos.D) node[anchor=north] {D}
+    %(mos.S) node[anchor=south] {S}
+
+    %(mos.D) -- (10,6)
+
+    (0,0) to[current source] (0,4) -- (5,4) to[R] (10,4) -- (mos.D)
+    (mos.S) -- (10,0) -- (0,0)
+    (10,0) -- (10,-0.25) node[sground] {}
+    (1.5,4) to[empty diode,*-*] (1.5,0)
+    (3,4) to[C,*-*] (3,0)
+    (4.5,4) to[R,*-*] (4.5,0)
+
+    % MOSFET Controller
+    (7,1.725) to[american voltage source] (mos.G)
+    (7,1.725) -- (6.5,1.725) node[sground] {}
+
+
+    %(-1,0) to[empty photodiode,o-,l_=PV-Zelle] (1,0) to[short] (6,0)
+    %(2,-2) to[short,o-] (2,-0.05) to[L=L] (4,-0.05) to[short,-o] (4,-2)
+    %(2,-2) -- (2,-0.05) to[L,l^=Kopplung] (4,-0.05) -- (4,-2) to[vco,l^=$U_{\mathrm{Signal}}$] (2,-2)
+    ;
+\end{circuitikz}

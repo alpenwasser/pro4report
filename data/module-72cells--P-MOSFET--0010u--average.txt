@@ -1,0 +1,4 @@
+Interval Start:  0us
+Interval End:   10us
+Average:     33.314W
+Integral:   333.14uJ

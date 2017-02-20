@@ -1,0 +1,90 @@
+% **************************************************************************** %
+\chapter{Verifikation des vereinfachten PV-Modul-Modells}
+\label{app:simu:module:simple}
+% **************************************************************************** %
+
+Vereinfachtes  \code{LTspice}-Modell,  Verifikation anhand  von  verschiedenen
+Plots.
+
+\begin{figure}
+    \begin{tikzpicture}
+       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,80mm)},
+                   grid=both,
+               ]
+               \addplot[-,color=magenta] table {data/module-simple--frequency-response--mag.dat};
+           \end{axis}
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,0)},
+                   grid=both,
+               ]
+               \addplot[-,color=red] table {data/module-simple--frequency-response--phase.dat};
+           \end{axis}
+       \end{scope}
+   \end{tikzpicture}
+   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des vereinfachten Modells f\"ur ein Modul.}
+   \label{fig:freqresponse:module:simple}
+\end{figure}
+
+\begin{figure}
+    \begin{tikzpicture}
+       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,80mm)},
+                   grid=both,
+               ]
+               \addplot[-,color=magenta] table {data/module-72cells--frequency-response--mag.dat};
+           \end{axis}
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,0)},
+                   grid=both,
+               ]
+               \addplot[-,color=magenta] table {data/module-72cells--frequency-response--phase.dat};
+           \end{axis}
+       \end{scope}
+   \end{tikzpicture}
+   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des Modells f\"ur ein Modul mit 72 Zellen}
+   \label{fig:freqresponse:module:72cell}
+\end{figure}
+
+\begin{figure}
+    \begin{tikzpicture}
+       \begin{scope}[x={(0mm,0mm)},y={(140mm,\textwidth)}]
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,80mm)},
+                   grid=both,
+               ]
+               \addplot[-,color=magenta] table {data/module-simple--frequency-response--mag.dat};
+               \addplot[-,color=blue] table {data/module-72cells--frequency-response--mag.dat};
+           \end{axis}
+           \begin{axis}[%
+                   xmode=log,
+                   height=65mm,
+                   width=\textwidth,
+                   at={(0,0)},
+                   grid=both,
+               ]
+               \addplot[-,color=magenta] table {data/module-simple--frequency-response--phase.dat};
+               \addplot[-,color=blue] table {data/module-72cells--frequency-response--phase.dat};
+           \end{axis}
+       \end{scope}
+   \end{tikzpicture}
+   \caption{Frequenzgang f\"ur den Strom durch den MOSFET des vereinfachten Modells f\"ur ein Modul.}
+   \label{fig:freqresponse:module:simple}
+\end{figure}

@@ -1,0 +1,4 @@
+Interval Start: 0us
+Interval End:   2us
+Average:    158.77W
+Integral:  317.54uJ

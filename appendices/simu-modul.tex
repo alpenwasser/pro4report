@@ -1,0 +1,70 @@
+% **************************************************************************** %
+\chapter{\code{LTspice} Schaltung eines Photovoltaik-Moduls}
+\label{app:simu:module}
+% **************************************************************************** %
+
+\fref{fig:ltspice:solarCell}   zeigt   die  Implementation   unseres   Modells
+einer     Solarzelle      gem\"ass     \fref{fig:circuit:solarCell}     (Seite
+\pageref{fig:circuit:solarCell} in Abschnitt \ref{subsubsec:hw:ask:modell}) in
+\code{LTspice}.
+
+Ein MOSFET  wird benutzt, um  die Zelle  gesteuert (in unserer  Simulation bei
+einer Tr\"agerfrequenz von \SI{10}{\kilo\hertz}) kurzschliessen zu k\"onnen.
+
+Es    soll   das    f\"ur   den    MOSFET   schlimmere    Szenario   evaluiert
+werden   (mehr    Strom/Leistung   durch    den   MOSFET\todo{Korrekt?}). Dazu
+werden   aus  72   Zellen  zwei   verschiedene  Module   aufgebaut: Ein  Modul
+\"ahnlich    zum    Sunset   Solargenerator    AS150    \cite{ref:solar:as150}
+mit    ca. \SI{10}{\ampere}   Kurzschlussstrom    und   etwa    \SI{22}{\volt}
+Leerlaufspannung  (\fref{fig:ltspice:module:cellBased:36x2}),  und  ein  Modul
+\"ahnlich  zum Sunmodule  Pro-Series  XL SWB320  \cite{ref:solar:sunmodulePro}
+mit   \SI{10}{\ampere}   Kurzschlussstrom    und   ungef\"ahr   \SI{45}{\volt}
+Leerlaufspannung (\fref{fig:ltspice:module:cellBased:72x1}).
+
+Weil die gesamte Kapazit\"at bei in Serie geschalteten Kondensatoren sinkt und
+bei  paralleler  Anordnung steigt,  hat  die  $2 \times  36$-Parallelschaltung
+\todo{Bindestrich und Spaces?} etwa die doppelte Kapazit\"at des Einzelstrangs
+aus 72 Zellen. Der  durch den MOSFET fliessende Stroms, die  \"uber den MOSFET
+abfallende Spannung und die im  MOSFET dissipierte Leistung beim Durchschalten
+des Transistors sollen zwischen den beiden Szenarien verglichen werden.
+
+Die zu  diesen Schaltungen geh\"orenden \code{.asc}-Dateien  sind elektronisch
+verf\"ugbar  (Datentr\"ager  siehe Anhang  \ref{app:electronicStorage},  Seite
+\pageref{app:electronicStorage}).
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/singlecell.eps}
+    \caption{%
+        Schaltung        zur         Simulation        einer        Solarzelle
+        gem\"ass        Abbildung       \ref{fig:circuit:solarCell}        von
+        Seite     \pageref{fig:circuit:solarCell}. Die     Solarmodule     aus
+        den     Abbildungen    \ref{fig:ltspice:module:cellBased:36x2}     und
+        \ref{fig:ltspice:module:cellBased:72x1}  basieren auf  Zellen gem\"ass
+        diesem Schaltschema.%
+    }
+    \label{fig:ltspice:solarCell}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/module-72cells.eps}
+    \caption{%
+        Solarmodul     \"ahnlich     zu    Sunset     Solargenerator     AS150
+        \cite{ref:solar:as150}, modelliert durch 2  parallele Str\"ange mit je
+        36 Zellen gem\"ass Abbildung \ref{fig:ltspice:solarCell} in Serie.%
+    }
+    \label{fig:ltspice:module:cellBased:36x2}
+\end{figure}
+
+\begin{figure}[h!tb]
+    \centering
+    \includegraphics[width=\textwidth]{images/ltspice/module-72cells-series.eps}
+    \caption{%
+        Solarmodul   \"ahnlich   zu   Sunmodule  Pro-Series   XL   SW320   aus
+        \cite{ref:solar:sunmodulePro},  modelliert durch  einen Strang  mit 72
+        Zellen gem\"ass Abbildung \ref{fig:ltspice:solarCell} in Serie.%
+    }
+    \label{fig:ltspice:module:cellBased:72x1}
+\end{figure}
+\todo{Transistoren aus Schaltbildern entfernen, IN/OUT benennen, Abbildung sollte nur Modul sein}
